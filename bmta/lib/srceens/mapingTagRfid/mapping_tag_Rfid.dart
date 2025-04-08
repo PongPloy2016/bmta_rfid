@@ -1,4 +1,6 @@
+import 'package:bmta/app_router.dart';
 import 'package:bmta/widgets/textFrom/custom_text_form_field.dart';
+import 'package:bmta/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
@@ -88,13 +90,9 @@ class _MappingTagRfidScreenState extends State<MappingTagRfidScreen> {
                 controller: trackingIdController,
                 hintText: 'เลขที่เอกสาร',
                 obscureText: false,
-                inputDecoration: InputDecoration(
+                inputDecoration:inputDecoration(context,
+                  nameImage: "lib/assets/icons/ic_svg_user.svg",
                   hintText: 'เลขที่เอกสาร',
-                  prefixIcon: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(Icons.document_scanner), // Customize your icon
-                  ),
-                  border: OutlineInputBorder(),
                 ),
               ),
               SizedBox(height: 10),
@@ -102,13 +100,9 @@ class _MappingTagRfidScreenState extends State<MappingTagRfidScreen> {
                 controller: subjectController,
                 hintText: 'เลขที่เอกสาร',
                 obscureText: false,
-                inputDecoration: InputDecoration(
+                inputDecoration: inputDecoration(context,
+                  nameImage: "lib/assets/icons/ic_svg_user.svg",
                   hintText: 'เลขที่เอกสาร',
-                  prefixIcon: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(Icons.document_scanner), // Customize your icon
-                  ),
-                  border: OutlineInputBorder(),
                 ),
               ),
               SizedBox(height: 10),
@@ -116,17 +110,43 @@ class _MappingTagRfidScreenState extends State<MappingTagRfidScreen> {
                 controller: tagIdController,
                 hintText: 'เลขที่เอกสาร',
                 obscureText: false,
-                inputDecoration: InputDecoration(
+                inputDecoration: inputDecoration(context,
+                  nameImage: "lib/assets/icons/ic_svg_user.svg",
                   hintText: 'เลขที่เอกสาร',
-                  prefixIcon: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(Icons.document_scanner), // Customize your icon
-                  ),
-                  border: OutlineInputBorder(),
                 ),
               ),
               SizedBox(height: 20),
-              ElevatedButton(onPressed: onButtonOKClicked, child: Text("บันทึก")),
+             SizedBox(
+                        width: double.infinity,
+                        height: MediaQuery.of(context).size.height * 0.07,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            //if (_formKey.currentState?.validate() ?? false) {
+                              // Do the search action
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('กำลังค้นหา...')),
+                              );
+                              Navigator.pushNamed(context, AppRouter.propertyList);
+                           // }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF4CAF50),
+                            padding: const EdgeInsets.symmetric(vertical: 12.0),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'บันทึก',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
             ],
           ),
         ),

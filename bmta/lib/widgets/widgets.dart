@@ -18,19 +18,18 @@ InputDecoration inputDecoration(
     labelText: labelText,
     labelStyle: secondaryTextStyle(),
     alignLabelWithHint: true,
-    hintText: hintText.validate(),
+    hintText: hintText?.validate(),
     hintStyle: secondaryTextStyle(),
-    isDense: true,
+    isDense: true, // Make sure it's compact
     prefixIcon: Padding(
       padding: const EdgeInsetsDirectional.only(start: 12.0 , end: 12.0),
       child: SvgPicture.asset(
-                 nameImage ?? "" ,
-                  width: 10,
-                  height: 10), // _myIcon is a 48px-wide widget.
+        nameImage ?? "",
+        width: 10,
+        height: 10,
+      ),
     ),
-    
-   // prefixIcon: prefixIcon != null ? Icon(prefixIcon, size: 16, color:  const Color.fromARGB(255, 43, 40, 40) ) : null,
-    suffixIcon: suffixIcon.validate(),
+    suffixIcon: suffixIcon?.validate(),
     enabledBorder: OutlineInputBorder(
       borderRadius: radius(borderRadius ?? defaultRadius),
       borderSide: BorderSide(color: Colors.transparent, width: 0.0),
@@ -43,13 +42,13 @@ InputDecoration inputDecoration(
       borderRadius: radius(borderRadius ?? defaultRadius),
       borderSide: BorderSide(color: Colors.red, width: 1.0),
     ),
-    errorMaxLines: 2,
+    errorMaxLines: 2, // Limit the error text lines
     errorStyle: primaryTextStyle(color: Colors.red, size: 12),
     focusedBorder: OutlineInputBorder(
       borderRadius: radius(borderRadius ?? defaultRadius),
       borderSide: BorderSide(color: Colors.transparent, width: 0.0),
     ),
     filled: true,
-    fillColor: Color(textFromGray600) ,
+    fillColor: Color(textFromGray600),
   );
 }

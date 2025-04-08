@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-
 class CustomTextFormField extends StatelessWidget {
   final TextEditingController? controller;
   final String? labelText;
@@ -16,7 +15,7 @@ class CustomTextFormField extends StatelessWidget {
   final bool obscureText;
   final String? Function(String?)? validator;
   final void Function(String)? onFieldSubmitted;
-  final InputDecoration inputDecoration;
+  final InputDecoration? inputDecoration;
 
   const CustomTextFormField({
     Key? key,
@@ -29,31 +28,33 @@ class CustomTextFormField extends StatelessWidget {
     this.obscureText = false,
     this.validator,
     this.onFieldSubmitted,
-    required this.inputDecoration,
+    this.inputDecoration,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    // Creating a default InputDecoration if inputDecoration is not passed.
+    InputDecoration finalDecoration = inputDecoration ??
+        InputDecoration(
+          labelText: labelText,
+          hintText: hintText,
+          prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
+          suffixIcon: suffixIcon,
+        );
+
     return Container(
       alignment: Alignment.center,
       padding: EdgeInsets.fromLTRB(10, 3, 20, 0),
       margin: EdgeInsets.only(left: 5, right: 5),
-      height: 50,
-      child: Row(
-        children: [
-          Expanded(
-            child: 
-            TextFormField(
-              controller: controller,
-              obscureText: obscureText,
-              keyboardType: keyboardType,
-              validator: validator,
-              onFieldSubmitted: onFieldSubmitted,
-              decoration: inputDecoration,
-              style: TextStyle(color: Colors.black),
-            ),
-          ),
-        ],
+      //height: 50,
+      child: TextFormField(
+        controller: controller,
+        obscureText: obscureText,
+        keyboardType: keyboardType,
+        validator: validator,
+        onFieldSubmitted: onFieldSubmitted,
+        decoration: finalDecoration,
+        style: TextStyle(color: Colors.black),
       ),
     );
   }

@@ -27,24 +27,55 @@ class _SerachSuppliseSreenState extends State<SerachSuppliseSreen> {
   final _formKey = GlobalKey<FormState>();
   final _codeController = TextEditingController();
   final _nameController = TextEditingController();
-  final _controller = SingleValueDropDownController();
-  final _controllerArea = SingleValueDropDownController();
+  final _controllerBuilding = SingleValueDropDownController();
+  final _controllerFloor = SingleValueDropDownController();
+  final _controllernArea = SingleValueDropDownController();
 
   String? selectedValue;
-  List<DropDownValueModel> dropDownList = [];
+  List<DropDownValueModel> dropDownBuildingList = [];
+  List<DropDownValueModel> dropDownFloorList = [];
+  List<DropDownValueModel> dropDownAreaList = [];
 
   @override
   void initState() {
     super.initState();
     repository = RFIDSerachSuppliesRepository(); // Initialize repository
-    initiload(); // Load the initial data
+   // initiload(); // Load the initial data
+   initMockData();
+  }
+
+
+   // Function to simulate the mock data
+  void initMockData() {
+    dropDownBuildingList = [
+     
+      DropDownValueModel( name: 'อาคาร 1', value: '1'),
+      DropDownValueModel( name: 'อาคาร 2', value: '2'),
+      DropDownValueModel( name: 'อาคาร 3', value: '3'),
+      DropDownValueModel( name: 'อาคาร 4', value: '4'),
+    ];
+
+    dropDownFloorList = [
+      DropDownValueModel( name: 'ชั้น 1', value: '1'),
+      DropDownValueModel( name: 'ชั้น 2', value: '2'),
+      DropDownValueModel( name: 'ชั้น 3', value: '3'),
+      DropDownValueModel( name: 'ชั้น 4', value: '4'),
+    ];
+
+    dropDownAreaList = [
+      DropDownValueModel( name: 'พื้นที่ 1', value: '1'),
+      DropDownValueModel( name: 'พื้นที่ 2', value: '2'),
+      DropDownValueModel( name: 'พื้นที่ 3', value: '3'),
+      DropDownValueModel( name: 'พื้นที่ 4', value: '4'),
+    ];
+  //  _controller.dropDownValue = dropDownBuildingList[0]; // Set default value
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: "รายการทรัพย์สิน" ?? '',
+        title: "ค้นหาครุภัณฑ์" ?? '',
         onSuccess: () {
           Navigator.pop(context);
         },
@@ -53,7 +84,8 @@ class _SerachSuppliseSreenState extends State<SerachSuppliseSreen> {
       body: Stack(
         children: [
           Container(
-            alignment: Alignment.center,
+            color: Colors.transparent,
+            alignment: Alignment.topCenter,
             width: double.infinity,
             height: double.infinity,
             child: SingleChildScrollView(
@@ -71,13 +103,19 @@ class _SerachSuppliseSreenState extends State<SerachSuppliseSreen> {
                       // รหัสครุภัณฑ์
                       CustomTextFormField(
                         controller: _codeController,
-                        hintText: 'รหัสครูกันท์',
+                        hintText: 'รหัสครุภัณฑ์',
                         obscureText: false,
                         inputDecoration: inputDecoration(
-                          nameImage: "lib/assets/icons/ic_login_email.svg",
+                          nameImage: "lib/assets/icons/ic_svg_profile.svg",
                           context,
-                          hintText: "รหัสครูกันท์",
+                          hintText: "รหัสครุภัณฑ์",
                         ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter a code';
+                          }
+                          return null;
+                        },
                       ),
                       SizedBox(height: 16),
 
@@ -87,20 +125,31 @@ class _SerachSuppliseSreenState extends State<SerachSuppliseSreen> {
                         hintText: 'ชื่อครุภัณฑ์',
                         obscureText: false,
                         inputDecoration: inputDecoration(
-                          nameImage: "lib/assets/icons/ic_login_email.svg",
+                          nameImage: "lib/assets/icons/ic_svg_user.svg",
                           context,
                           hintText: "ชื่อครุภัณฑ์",
                         ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter a name';
+                          }
+                          return null;
+                        },
                       ),
                       SizedBox(height: 16),
 
                       // อาคาร
                       CustomDropdownFormField(
-                        controller: _controller,
+                        controller: _controllerBuilding,
                         labelText: 'อาคาร',
-                        dropDownList: dropDownList,
-                        itemCount: dropDownList.length,
+                        dropDownList: dropDownBuildingList,
+                        itemCount: dropDownBuildingList.length,
                         enabled: true,
+                        inputDecoration: inputDecoration(
+                          nameImage: "lib/assets/icons/ic_svg_user.svg",
+                          context,
+                          hintText: "อาคาร",
+                        ),
                         onChanged: (value) {
                           setState(() {
                             selectedValue = value?.toString();
@@ -117,10 +166,10 @@ class _SerachSuppliseSreenState extends State<SerachSuppliseSreen> {
 
                       // ชั้น
                       CustomDropdownFormField(
-                        controller: _controller,
+                        controller: _controllerFloor,
                         labelText: "ชั้น",
-                        dropDownList: dropDownList,
-                        itemCount: dropDownList.length,
+                        dropDownList: dropDownFloorList,
+                        itemCount: dropDownFloorList.length,
                         enabled: true,
                         onChanged: (value) {
                           setState(() {
@@ -132,16 +181,20 @@ class _SerachSuppliseSreenState extends State<SerachSuppliseSreen> {
                             return 'Please select an option';
                           }
                           return null;
-                        },
+                        }, inputDecoration: inputDecoration(
+                          nameImage: "lib/assets/icons/ic_svg_user.svg",
+                          context,
+                          hintText: "ชั้น",
+                        ),
                       ),
                       SizedBox(height: 16),
 
                       // พื้นที่/ห้อง
                       CustomDropdownFormField(
-                        controller: _controllerArea,
+                        controller: _controllernArea,
                         labelText: "พื้นที่/ห้อง",
-                        dropDownList: dropDownList,
-                        itemCount: dropDownList.length,
+                        dropDownList: dropDownAreaList,
+                        itemCount: dropDownAreaList.length,
                         enabled: true,
                         onChanged: (value) {
                           setState(() {
@@ -153,7 +206,11 @@ class _SerachSuppliseSreenState extends State<SerachSuppliseSreen> {
                             return 'Please select an option';
                           }
                           return null;
-                        },
+                        }, inputDecoration: inputDecoration(
+                          nameImage: "lib/assets/icons/ic_svg_user.svg",
+                          context,
+                          hintText: "พื้นที่/ห้อง",
+                        ),
                       ),
                       SizedBox(height: 24),
 
@@ -163,11 +220,11 @@ class _SerachSuppliseSreenState extends State<SerachSuppliseSreen> {
                         height: MediaQuery.of(context).size.height * 0.07,
                         child: ElevatedButton(
                           onPressed: () {
-                            //if (_formKey.currentState?.validate() ?? false) {
+                            if (_formKey.currentState?.validate() ?? false) {
                             // Do the search action
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('กำลังค้นหา...')));
                             Navigator.pushNamed(context, AppRouter.equipmentList);
-                            //}
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF4CAF50),
@@ -204,7 +261,7 @@ class _SerachSuppliseSreenState extends State<SerachSuppliseSreen> {
 
      setState(() {
           // Transform API response into dropDownList for the dropdown
-          dropDownList = response.data.data.map<DropDownValueModel>((data) {
+          dropDownBuildingList = response.data.data.map<DropDownValueModel>((data) {
             return DropDownValueModel(
               value: data.memoDataClassId.toString(),  // Use appropriate data field
               name: data.description,  // Use appropriate data field

@@ -1,21 +1,26 @@
+import 'package:bmta/app_router.dart';
+import 'package:bmta/widgets/appbar/custom_app_bar.dart';
+import 'package:bmta/widgets/textFrom/custom_text_form_field.dart';
+import 'package:bmta/widgets/widgets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:zebra_rfid_reader_sdk/zebra123.dart';
 
-void main() {
-  runApp(const MyApp());
-}
 
 enum Views { list, write }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+class SearchRfidScreen extends StatefulWidget {
+  const SearchRfidScreen({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  State<SearchRfidScreen> createState() => _SearchRfidScreenState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _SearchRfidScreenState extends State<SearchRfidScreen> {
+   final TextEditingController trackingIdController = TextEditingController();
+  final TextEditingController subjectController = TextEditingController();
+  final TextEditingController tagIdController = TextEditingController();
+
   Zebra123? zebra123;
   Interfaces interface = Interfaces.unknown;
   Status connectionStatus = Status.disconnected;
@@ -32,6 +37,10 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     zebra123 = Zebra123(callback: callback);
+
+   
+   
+    
     super.initState();
   }
 
@@ -47,10 +56,20 @@ class _MyAppState extends State<MyApp> {
   }
 
   void startScanning() {
+     barcodes.addAll(
+        [Barcode(barcode: "123456789012", format: "QR", seen: "2023-10-01", interface: Interfaces.unknown)]);
+    tags.addAll(
+        [RfidTag(
+            epc: "12345678901234567890",
+            rssi: -50,
+            seen: "2023-10-01",
+            interface: Interfaces.unknown, antenna: 0, distance: 0, memoryBankData: '', lockData: '', size: 0)]);
+      
+  
     zebra123?.setMode(Modes.rfid);
     zebra123?.startScanning();
-    tags.clear();
-    barcodes.clear();
+    // tags.clear();
+    // barcodes.clear();
     setState(() {
       scanning = true;
       tracking = false;
@@ -358,15 +377,93 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     Widget child = view == Views.write ? _writeView() : _listView();
 
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Zebra123 Plugin Example'),
-        ),
+    return  Scaffold(
+        appBar:  CustomAppBar(
+                title:"สร้าง Tag เอกสาร" ?? '',
+                onSuccess: () {
+                  Navigator.pop(context);
+                },
+              ),
+      
         body:
-            SingleChildScrollView(scrollDirection: Axis.vertical, child: child),
-      ),
-    );
+            Column(
+              children: [
+                SingleChildScrollView(scrollDirection: Axis.vertical, child: child),
+                Padding(
+        padding: EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CustomTextFormField(
+                controller: trackingIdController,
+                hintText: 'เลขที่เอกสาร',
+                obscureText: false,
+                inputDecoration:inputDecoration(context,
+                  nameImage: "lib/assets/icons/ic_svg_user.svg",
+                  hintText: 'เลขที่เอกสาร',
+                ),
+              ),
+              SizedBox(height: 10),
+              CustomTextFormField(
+                controller: subjectController,
+                hintText: 'ชื่อเอกสาร',
+                obscureText: false,
+                inputDecoration: inputDecoration(context,
+                  nameImage: "lib/assets/icons/ic_svg_user.svg",
+                  hintText: 'ชื่อเอกสาร',
+                ),
+              ),
+              SizedBox(height: 10),
+              CustomTextFormField(
+                controller: tagIdController,
+                hintText: 'TAG ID',
+                obscureText: false,
+                inputDecoration: inputDecoration(context,
+                  nameImage: "lib/assets/icons/ic_svg_user.svg",
+                  hintText: 'TAG ID',
+                ),
+              ),
+              SizedBox(height: 20),
+             SizedBox(
+                        width: double.infinity,
+                        height: MediaQuery.of(context).size.height * 0.07,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            //if (_formKey.currentState?.validate() ?? false) {
+                              // Do the search action
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('กำลังค้นหา...')),
+                              );
+                              Navigator.pushNamed(context, AppRouter.propertyList);
+                           // }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF4CAF50),
+                            padding: const EdgeInsets.symmetric(vertical: 12.0),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'บันทึก',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+            ],
+          ),
+        ),
+      )
+              ],
+            ));
+     
+   
   }
 
   void callback(Interfaces interface, Events event, dynamic data) {

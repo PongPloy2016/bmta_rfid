@@ -50,7 +50,7 @@ class _NavigationBarCustomScreenState extends State<NavigationBarCustomScreen> w
       body: TabBarView(
         controller: _tabController,
         physics: const NeverScrollableScrollPhysics(),
-        children: const [
+        children:  [
          
           MainPageScreen(),
            SerachSuppliseSreen(),

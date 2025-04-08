@@ -19,7 +19,8 @@ class CustomDropdownFormField extends StatelessWidget {
     this.itemCount,
     this.enabled,
     this.validator,
-    this.onChanged,
+    this.onChanged, 
+    this.inputDecoration,
   });
 
   final SingleValueDropDownController? controller;
@@ -29,6 +30,7 @@ class CustomDropdownFormField extends StatelessWidget {
   final bool? enabled;
   final String? Function(String?)? validator;
   final void Function(dynamic)? onChanged;
+  final InputDecoration? inputDecoration;
 
   @override
   Widget build(BuildContext context) {
@@ -44,12 +46,19 @@ class CustomDropdownFormField extends StatelessWidget {
         isEnabled: enabled ?? true,
         clearIconProperty: IconProperty(color: Colors.black),
         dropDownIconProperty: IconProperty(color: Colors.black),
-        textFieldDecoration: inputDecoration(
-                              nameImage: "lib/assets/icons/ic_login_email.svg",
-                              //  textImage: 'assets/icons/email.svg',
-                              context,
-                              hintText: labelText,
-                            ),
+        textFieldDecoration: inputDecoration ?? InputDecoration(
+          isDense: true,
+          border: InputBorder.none,
+          errorStyle: TextStyle(
+            color: Colors.red,
+            fontSize: fontSize9_SmallText.sp,
+          ),
+        ),
+        // onChanged: (val) {
+        //   if (onChanged != null) {
+        //     onChanged!(val);
+        //   }
+        // },
         onChanged: onChanged,
         validator: validator,
         autovalidateMode: AutovalidateMode.onUserInteraction,

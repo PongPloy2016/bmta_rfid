@@ -7,6 +7,7 @@ import 'package:bmta/srceens/bottomnavpage/navigationBarScreen.dart';
 import 'package:bmta/srceens/mapingTagRfid/Mapping_tag_Rfid.dart';
 import 'package:bmta/srceens/propertyList/property_listing_screen.dart';
 import 'package:bmta/srceens/serachFindProperty/serach_find_property_screen.dart';
+import 'package:bmta/srceens/serachRFID/search_Rfid_screen.dart';
 import 'package:bmta/srceens/serachSupplies/serach_supplise_sreen.dart';
 
 class AppRouter {
@@ -24,6 +25,7 @@ class AppRouter {
   static const String serachSupplise = 'serachSupplise';
   static const String propertyList = 'propertyList';
   static const String mappingTagRfid = 'mappingTagRfid';
+  static const String searchRfid = 'searchRfid';
 
 
   // Router Map
@@ -40,6 +42,7 @@ class AppRouter {
     serachFindProperty: (context) => SerachFindPropertyScreen(),
     serachSupplise: (context) => SerachSuppliseSreen(),
     propertyList: (context) => PropertyListingScreen(),
+    searchRfid: (context) => SearchRfidScreen(),
     mappingTagRfid: (context) => MappingTagRfidScreen(data: MemoItem(memoCode: '', subject: '')),
 
     
