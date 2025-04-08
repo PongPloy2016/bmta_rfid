@@ -1,0 +1,150 @@
+import 'package:bmta/widgets/textFrom/custom_text_form_field.dart';
+import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
+
+class MappingTagRfidScreen extends StatefulWidget {
+  final MemoItem data;
+
+  MappingTagRfidScreen({Key? key, required this.data}) : super(key: key);
+
+  @override
+  _MappingTagRfidScreenState createState() => _MappingTagRfidScreenState();
+}
+
+class _MappingTagRfidScreenState extends State<MappingTagRfidScreen> {
+  final TextEditingController trackingIdController = TextEditingController();
+  final TextEditingController subjectController = TextEditingController();
+  final TextEditingController tagIdController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize controllers with data from MemoItem
+    trackingIdController.text = widget.data.memoCode;
+    subjectController.text = widget.data.subject;
+  }
+
+  void onButtonOKClicked() async {
+    String trackingIds = trackingIdController.text;
+    String tagIds = tagIdController.text;
+
+    if (tagIds.isEmpty) {
+      _showDialog("ผิดผลาด", "กรุณากรอกรหัส TAG RFID");
+      return;
+    }
+
+    var json = {'tagId': tagIds, 'trackingId': trackingIds};
+
+    var ret = await _sendDataToAPI(json);
+    if (ret['success']) {
+      _showDialog("ถูกต้อง", "ทำการจับคู่เรียบร้อย");
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MappingTag()));
+    } else {
+      _showDialog("ผิดผลาด", ret['message']);
+    }
+  }
+
+  Future<Map<String, dynamic>> _sendDataToAPI(Map<String, dynamic> json) async {
+    try {
+      Dio dio = Dio();
+      var response = await dio.post('https://your-api-url.com/api/rfid/tag', data: json);
+      return response.data;
+    } catch (e) {
+      return {'success': false, 'message': 'Error: $e'};
+    }
+  }
+
+  void _showDialog(String title, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("สร้าง Tag เอกสาร")),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CustomTextFormField(
+                controller: trackingIdController,
+                hintText: 'เลขที่เอกสาร',
+                obscureText: false,
+                inputDecoration: InputDecoration(
+                  hintText: 'เลขที่เอกสาร',
+                  prefixIcon: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(Icons.document_scanner), // Customize your icon
+                  ),
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              SizedBox(height: 10),
+              CustomTextFormField(
+                controller: subjectController,
+                hintText: 'เลขที่เอกสาร',
+                obscureText: false,
+                inputDecoration: InputDecoration(
+                  hintText: 'เลขที่เอกสาร',
+                  prefixIcon: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(Icons.document_scanner), // Customize your icon
+                  ),
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              SizedBox(height: 10),
+              CustomTextFormField(
+                controller: tagIdController,
+                hintText: 'เลขที่เอกสาร',
+                obscureText: false,
+                inputDecoration: InputDecoration(
+                  hintText: 'เลขที่เอกสาร',
+                  prefixIcon: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(Icons.document_scanner), // Customize your icon
+                  ),
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(onPressed: onButtonOKClicked, child: Text("บันทึก")),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class MemoItem {
+  final String memoCode;
+  final String subject;
+
+  MemoItem({required this.memoCode, required this.subject});
+}
+
+class MappingTag extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(appBar: AppBar(title: Text("Mapping Tag")), body: Center(child: Text("Mapping Tag Screen")));
+  }
+}
