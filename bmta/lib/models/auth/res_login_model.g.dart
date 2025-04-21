@@ -8,9 +8,12 @@ part of 'res_login_model.dart';
 
 ResLoginModel _$ResLoginModelFromJson(Map<String, dynamic> json) =>
     ResLoginModel(
-      isSuccess: json['isSuccess'] as bool,
-      message: json['message'] as String,
-      data: Data.fromJson(json['data'] as Map<String, dynamic>),
+      isSuccess: json['isSuccess'] as bool?,
+      message: json['message'] as String?,
+      data:
+          json['data'] == null
+              ? null
+              : Data.fromJson(json['data'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$ResLoginModelToJson(ResLoginModel instance) =>
@@ -21,10 +24,13 @@ Map<String, dynamic> _$ResLoginModelToJson(ResLoginModel instance) =>
     };
 
 Data _$DataFromJson(Map<String, dynamic> json) => Data(
-  token: json['token'] as String,
-  refreshToken: json['refreshToken'] as String,
-  expiration: json['expiration'] as String,
-  user: User.fromJson(json['user'] as Map<String, dynamic>),
+  token: json['token'] as String?,
+  refreshToken: json['refreshToken'] as String?,
+  expiration: json['expiration'] as String?,
+  user:
+      json['user'] == null
+          ? null
+          : User.fromJson(json['user'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$DataToJson(Data instance) => <String, dynamic>{

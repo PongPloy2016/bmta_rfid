@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bmta/app_router.dart';
+import 'package:bmta/provider/serach_find_property_provider.dart';
 import 'package:bmta/repository/rfid_serach_supplies_repository.dart';
 import 'package:bmta/themes/fontsize.dart';
 import 'package:bmta/widgets/appbar/custom_app_bar.dart';
@@ -11,6 +12,7 @@ import 'package:bmta/widgets/widgets.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:http/http.dart' as ref;
 
 class SerachSuppliseSreen extends StatefulWidget {
   const SerachSuppliseSreen({super.key});
@@ -47,6 +49,10 @@ class _SerachSuppliseSreenState extends State<SerachSuppliseSreen> {
 
    // Function to simulate the mock data
   void initMockData() {
+
+          ref.read(branchControllerProvider.notifier).login();
+
+
     dropDownBuildingList = [
      
       DropDownValueModel( name: 'อาคาร 1', value: '1'),

@@ -4,9 +4,9 @@ part 'res_login_model.g.dart';
 
 @JsonSerializable()
 class ResLoginModel {
-  final bool isSuccess;
-  final String message;
-  final Data data;
+  final bool? isSuccess;
+  final String? message;
+  final Data? data;
 
   ResLoginModel({
     required this.isSuccess,
@@ -26,22 +26,22 @@ class ResLoginModel {
     return {
       'isSuccess': isSuccess,
       'message': message,
-      'data': data.toJson(),
+      'data': data?.toJson(),
     };
   }
 }
 @JsonSerializable()
 class Data {
-  final String token;
-  final String refreshToken;
-  final String expiration;
-  final User user;
+  final String? token;
+  final String? refreshToken;
+  final String? expiration;
+  final User? user;
 
   Data({
-    required this.token,
-    required this.refreshToken,
-    required this.expiration,
-    required this.user,
+     this.token,
+     this.refreshToken,
+     this.expiration,
+     this.user,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) {
@@ -58,7 +58,7 @@ class Data {
       'token': token,
       'refreshToken': refreshToken,
       'expiration': expiration,
-      'user': user.toJson(),
+      'user': user?.toJson(),
     };
   }
 }

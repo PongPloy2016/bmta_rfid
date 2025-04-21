@@ -8,6 +8,7 @@ import 'package:bmta/models/equipmentItemModel/reqMemoList.dart';
 import 'package:bmta/models/memoDataClassification/memo_data_classification_model.dart';
 import 'package:bmta/models/pokemon.dart';
 import 'package:bmta/Interface/rfid_repo_interface.dart';
+import 'package:bmta/models/serachSupplies/branch_supplies_model_response.dart';
 import 'package:bmta/utils/auth_utils.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +30,46 @@ class RFIDSerachSuppliesRepository implements MemoDataClassificationRepoInterfac
 
  // Call this function to load data from API using Dio
    // Method to get MemoDataClassification and return Future<MemoDataClassificationModel>
+  
+    Future<BranchSerachSuppliesModelResponse> getBranch() async {
+    String url =
+        'https://rfid.uberpod.com/RTLS/rfid/getBranch';
+
+    // Set headers if necessary (like content type)
+    var options = Options(
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-KEY': dotenv.env['XAPIKey'] ?? '',
+      },
+    );
+
+  
+
+    try {
+      // Make the GET request
+      final response = await dio.get(url, options: options);
+
+      // Check if the request was successful
+      if (response.statusCode == 200) {
+        // Parse the response body into the MockupMemoModel
+        var memoResponse = BranchSerachSuppliesModelResponse.fromJson(response.data);
+
+        // Handle the parsed data (for example, print the response data)
+        print('Total Memos: ${memoResponse.data}');
+       // print('First Memo Code: ${memoResponse.data[0].desc}');
+
+        return memoResponse;
+      } else {
+        // Handle error response
+        return Future.error('Failed to load memos: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Handle any exceptions that occur during the request
+      return Future.error('Failed to load memos: ${e.toString()}');
+    }
+  }
+
+  
   Future<MemoDataClassificationModel> getMemoDataClassification(BuildContext context) async {
     try {
       // Make the GET request using Dio

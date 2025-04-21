@@ -53,6 +53,7 @@ class MenuItemCardWidget extends StatelessWidget {
             // Add spacing between icon and text
             // Container for the text
             Container(
+              alignment: Alignment.bottomCenter,
               margin: EdgeInsets.only(bottom: 1.0),
               child: Text(
                 menuItem.name,

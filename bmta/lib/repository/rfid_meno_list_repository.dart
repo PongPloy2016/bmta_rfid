@@ -11,6 +11,7 @@ import 'package:bmta/utils/auth_utils.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:riverpod/riverpod.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 class RFIDMenoListRepository implements MemoListRepoInterface {
@@ -71,6 +72,7 @@ class RFIDMenoListRepository implements MemoListRepoInterface {
       return Future.error('Failed to load memos: ${e.toString()}');
     }
   }
+
 }
 
 

@@ -6,17 +6,17 @@ import 'package:flutter/material.dart';
 
 class EquipmentItemWidget extends StatelessWidget {
   final EquipmentItem item;
-  final Function onlickTap;
+  final Function onClickTap;
 
 
   EquipmentItemWidget({required this.item ,
-    required this.onlickTap,
+    required this.onClickTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => onlickTap(),
+      onTap: () => onClickTap(),
       child: Card(
         color: Colors.white,
         margin: EdgeInsets.all(10),
@@ -62,7 +62,7 @@ class EquipmentItemWidget extends StatelessWidget {
               errorBuilder: (context, error, stackTrace) {
                 // If the image URL fails, fallback to the asset
                 return Image.asset(
-                  'lib/assets/images/ic_list-pc_screen_01.png',
+                  item.nameImage,
                   width: 80,
                   height: 80,
                   scale: 1,

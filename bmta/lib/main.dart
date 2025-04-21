@@ -17,6 +17,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:month_year_picker/month_year_picker.dart';
@@ -29,13 +30,15 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 Future<void> main() async {
     WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: '.env');
-  runApp( AppConfig(
-       rfidRepo: RFIDRepository(),
-    authRepo : RFIDAuthRepository(),
-        listhRepo: RFIDMenoListRepository(),
-        
-        child:  MyApp()
-    ));
+  runApp( ProviderScope(
+    child: AppConfig(
+       
+      authRepo : RFIDAuthRepository(),
+          listhRepo: RFIDMenoListRepository(),
+          
+          child:  MyApp()
+      ),
+  ));
 }
 
 

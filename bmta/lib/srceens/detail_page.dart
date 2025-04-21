@@ -20,7 +20,7 @@ class _DetailPageState extends State<DetailPage> {
   Widget build(BuildContext context) {
     routeData = ModalRoute.of(context)?.settings.arguments as Map;
     pokemon = routeData['pokemon'];
-    repository = AppConfig.of(context)!.rfidRepo;
+    //repository = AppConfig.of(context)!.rfidRepo;
 
     return Scaffold(
       appBar: AppBar(

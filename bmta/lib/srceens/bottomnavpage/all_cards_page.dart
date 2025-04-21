@@ -18,7 +18,7 @@ class _AllCardsPageState extends State<AllCardsPage> {
 
   @override
   Widget build(BuildContext context) {
-    repository = AppConfig.of(context)!.rfidRepo;
+   // repository = AppConfig.of(context)!.rfidRepo;
     loadAllPokemon();
 
     return Scaffold(

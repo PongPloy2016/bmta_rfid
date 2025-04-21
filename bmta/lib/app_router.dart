@@ -45,15 +45,6 @@ class AppRouter {
     searchRfid: (context) => SearchRfidScreen(),
     mappingTagRfid: (context) => MappingTagRfidScreen(data: MemoItem(memoCode: '', subject: '')),
 
-    
-      
-      //   '/detail': (context) => const DetailPage(),
-        
-      //   // Your main screen
-
-   
-    // productDetail: (context) => ProductDetail(),
-    // productUpdate: (context) => ProductUpdate(),
   
   };
 

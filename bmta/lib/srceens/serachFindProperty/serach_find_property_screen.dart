@@ -7,6 +7,7 @@ import 'package:bmta/widgets/textFrom/custom_text_form_field.dart';
 import 'package:bmta/widgets/widgets.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:convert';
 import 'package:dio/dio.dart';
@@ -44,12 +45,17 @@ class DataList {
   }
 }
 
-class SerachFindPropertyScreen extends StatefulWidget {
+class SerachFindPropertyScreen extends ConsumerStatefulWidget {
+  const SerachFindPropertyScreen({Key? key}) : super(key: key);
+  
   @override
-  SerachFindPropertyScreenState createState() => SerachFindPropertyScreenState();
+  ConsumerState<ConsumerStatefulWidget> createState() {
+    return SerachFindPropertyScreenState();
+  }
+ 
 }
 
-class SerachFindPropertyScreenState extends State<SerachFindPropertyScreen> {
+class SerachFindPropertyScreenState extends  ConsumerState<SerachFindPropertyScreen>   {
   final Dio dio = Dio();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -100,74 +106,6 @@ class SerachFindPropertyScreenState extends State<SerachFindPropertyScreen> {
       DropDownValueModel( name: 'ห้อง 4', value: '4'),
     ];
   //  _controller.dropDownValue = dropDownBuildingList[0]; // Set default value
-  }
-
-  // Fetch branch data using Dio
-  Future<void> getBranch() async {
-    try {
-      final response = await dio.get('https://example.com/api/branches');
-      if (response.statusCode == 200) {
-        DataList dataList = DataList.fromJson(response.data);
-        setState(() {
-          dropDownBranchList = dataList.data;
-        });
-      } else {
-        _showErrorDialog('Failed to load branches');
-      }
-    } catch (e) {
-      _showErrorDialog('Error: $e');
-    }
-  }
-
-  // Fetch building data using Dio
-  Future<void> getBuilding() async {
-    try {
-      final response = await dio.get('https://example.com/api/buildings/$branchSelect');
-      if (response.statusCode == 200) {
-        DataList dataList = DataList.fromJson(response.data);
-        setState(() {
-          dropDownBuildingList = dataList.data;
-        });
-      } else {
-        _showErrorDialog('Failed to load buildings');
-      }
-    } catch (e) {
-      _showErrorDialog('Error: $e');
-    }
-  }
-
-  // Fetch floor data using Dio
-  Future<void> getFloor() async {
-    try {
-      final response = await dio.get('https://example.com/api/floors/$buildingSelect');
-      if (response.statusCode == 200) {
-        DataList dataList = DataList.fromJson(response.data);
-        setState(() {
-          dropDownFloorList = dataList.data;
-        });
-      } else {
-        _showErrorDialog('Failed to load floors');
-      }
-    } catch (e) {
-      _showErrorDialog('Error: $e');
-    }
-  }
-
-  // Fetch room data using Dio
-  Future<void> getRoom() async {
-    try {
-      final response = await dio.get('https://example.com/api/rooms/$buildingSelect/$floorSelect');
-      if (response.statusCode == 200) {
-        DataList dataList = DataList.fromJson(response.data);
-        setState(() {
-          dropDownRoomList = dataList.data;
-        });
-      } else {
-        _showErrorDialog('Failed to load rooms');
-      }
-    } catch (e) {
-      _showErrorDialog('Error: $e');
-    }
   }
 
   // Error dialog method
@@ -225,7 +163,6 @@ class SerachFindPropertyScreenState extends State<SerachFindPropertyScreen> {
                             buildingSelect = null;
                             floorSelect = null;
                             roomSelect = null;
-                            getBuilding(); // Fetch building data after branch selection
                           });
                         },
                         validator: (value) {
@@ -252,7 +189,7 @@ class SerachFindPropertyScreenState extends State<SerachFindPropertyScreen> {
                             buildingSelect = value?.toString();
                             floorSelect = null;
                             roomSelect = null;
-                            getFloor(); // Fetch floor data after building selection
+                           
                           });
                         },
                         validator: (value) {
@@ -278,7 +215,7 @@ class SerachFindPropertyScreenState extends State<SerachFindPropertyScreen> {
                           setState(() {
                             floorSelect = value?.toString();
                             roomSelect = null;
-                            getRoom(); // Fetch room data after floor selection
+                           
                           });
                         },
                         validator: (value) {

@@ -16,9 +16,16 @@ class MainListItem extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsetsDirectional.only(start: 12.0, end: 12.0),
-            child:Image.asset(
+            child: 
+            //  SvgPicture.asset("lib/assets/icons/ic_svg_profile.svg",
+            //       height: 20, // Adjust the height as needed
+            //       width: 20,  // Adjust the width as needed
+            //       fit: BoxFit.contain,
+            //     ),
+            
+            Image.asset(
               //fit: BoxFit.fill,
-              "lib/assets/images/bmta_logo_icon_three.png",
+              "lib/assets/icons/ic_svg_system.png",
               width: 30,
               height: 30,
              // scale: 1,
