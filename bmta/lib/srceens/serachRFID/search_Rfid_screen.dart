@@ -379,7 +379,7 @@ class _SearchRfidScreenState extends State<SearchRfidScreen> {
 
     return  Scaffold(
         appBar:  CustomAppBar(
-                title:"สร้าง Tag เอกสาร" ?? '',
+                title:"กำหนด TAG ID ครุภัณท์" ?? '',
                 onSuccess: () {
                   Navigator.pop(context);
                 },
@@ -388,7 +388,48 @@ class _SearchRfidScreenState extends State<SearchRfidScreen> {
         body:
             Column(
               children: [
-                SingleChildScrollView(scrollDirection: Axis.vertical, child: child),
+               // SingleChildScrollView(scrollDirection: Axis.vertical, child: child),
+
+
+                  Card(
+            color: Colors.white,
+            margin: EdgeInsets.all(15),
+            elevation: 4,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                       Container(
+              alignment: Alignment.topCenter,
+              //  height: 60,
+              // color: Colors.yellow,
+              width: double.infinity, // Make sure the width takes the full space
+              child: Image.asset(
+                fit: BoxFit.fill,
+                "lib/assets/images/ic_tag_rfid.png",
+                width: 280,
+               height:  280,
+                scale: 1,
+              ),
+              //  SvgPicture.asset(
+              //   menuItem.image,
+              //   height: 40, // Adjust the height as needed
+              //   width: 40,  // Adjust the width as needed
+              //   fit: BoxFit.contain,
+              // ),
+            ),
+                   
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+
                 Padding(
         padding: EdgeInsets.all(16.0),
         child: SingleChildScrollView(

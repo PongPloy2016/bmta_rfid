@@ -50,7 +50,7 @@ class _SerachSuppliseSreenState extends State<SerachSuppliseSreen> {
    // Function to simulate the mock data
   void initMockData() {
 
-          ref.read(branchControllerProvider.notifier).login();
+       //   ref.read(branchControllerProvider.notifier).login();
 
 
     dropDownBuildingList = [

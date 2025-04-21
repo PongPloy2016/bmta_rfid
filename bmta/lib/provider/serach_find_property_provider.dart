@@ -34,7 +34,6 @@ class BranchController extends Notifier<BranchState> {
 
   Future<void> fetchBranches() async {
     state = BranchState(isLoading: true);
-
     try {
       final response = await _repo.getBranch();
 

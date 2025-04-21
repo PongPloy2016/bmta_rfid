@@ -47,7 +47,7 @@ class RFIDSerachSuppliesRepository implements MemoDataClassificationRepoInterfac
 
     try {
       // Make the GET request
-      final response = await dio.get(url, options: options);
+      final response = await dio.post(url, options: options);
 
       // Check if the request was successful
       if (response.statusCode == 200) {
@@ -55,7 +55,7 @@ class RFIDSerachSuppliesRepository implements MemoDataClassificationRepoInterfac
         var memoResponse = BranchSerachSuppliesModelResponse.fromJson(response.data);
 
         // Handle the parsed data (for example, print the response data)
-        print('Total Memos: ${memoResponse.data}');
+        print('Total Memos: ${jsonEncode(memoResponse.data)}');
        // print('First Memo Code: ${memoResponse.data[0].desc}');
 
         return memoResponse;

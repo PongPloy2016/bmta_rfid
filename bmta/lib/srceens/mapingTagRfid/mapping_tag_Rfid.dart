@@ -79,7 +79,7 @@ class _MappingTagRfidScreenState extends State<MappingTagRfidScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("สร้าง Tag เอกสาร")),
+      appBar: AppBar(title: Text("กำหนด TAG ID ครุภัณท์")),
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: SingleChildScrollView(
@@ -90,7 +90,8 @@ class _MappingTagRfidScreenState extends State<MappingTagRfidScreen> {
                 controller: trackingIdController,
                 hintText: 'เลขที่เอกสาร',
                 obscureText: false,
-                inputDecoration:inputDecoration(context,
+                inputDecoration: inputDecoration(
+                  context,
                   nameImage: "lib/assets/icons/ic_svg_user.svg",
                   hintText: 'เลขที่เอกสาร',
                 ),
@@ -100,7 +101,8 @@ class _MappingTagRfidScreenState extends State<MappingTagRfidScreen> {
                 controller: subjectController,
                 hintText: 'เลขที่เอกสาร',
                 obscureText: false,
-                inputDecoration: inputDecoration(context,
+                inputDecoration: inputDecoration(
+                  context,
                   nameImage: "lib/assets/icons/ic_svg_user.svg",
                   hintText: 'เลขที่เอกสาร',
                 ),
@@ -110,43 +112,38 @@ class _MappingTagRfidScreenState extends State<MappingTagRfidScreen> {
                 controller: tagIdController,
                 hintText: 'เลขที่เอกสาร',
                 obscureText: false,
-                inputDecoration: inputDecoration(context,
+                inputDecoration: inputDecoration(
+                  context,
                   nameImage: "lib/assets/icons/ic_svg_user.svg",
                   hintText: 'เลขที่เอกสาร',
                 ),
               ),
               SizedBox(height: 20),
-             SizedBox(
-                        width: double.infinity,
-                        height: MediaQuery.of(context).size.height * 0.07,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            //if (_formKey.currentState?.validate() ?? false) {
-                              // Do the search action
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('กำลังค้นหา...')),
-                              );
-                              Navigator.pushNamed(context, AppRouter.propertyList);
-                           // }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF4CAF50),
-                            padding: const EdgeInsets.symmetric(vertical: 12.0),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-                          ),
-                          child: Center(
-                            child: Text(
-                              'บันทึก',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
+              SizedBox(
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height * 0.07,
+                child: ElevatedButton(
+                  onPressed: () {
+                    //if (_formKey.currentState?.validate() ?? false) {
+                    // Do the search action
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('กำลังค้นหา...')));
+                    Navigator.pushNamed(context, AppRouter.propertyList);
+                    // }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF4CAF50),
+                    padding: const EdgeInsets.symmetric(vertical: 12.0),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'บันทึก',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),

@@ -1,4 +1,6 @@
 import 'package:bmta/app_router.dart';
+import 'package:bmta/provider/serach_find_property_provider.dart';
+import 'package:bmta/repository/rfid_serach_supplies_repository.dart';
 import 'package:bmta/themes/fontsize.dart';
 import 'package:bmta/widgets/appbar/custom_app_bar.dart';
 import 'package:bmta/widgets/custom_text_default.dart';
@@ -47,15 +49,14 @@ class DataList {
 
 class SerachFindPropertyScreen extends ConsumerStatefulWidget {
   const SerachFindPropertyScreen({Key? key}) : super(key: key);
-  
+
   @override
   ConsumerState<ConsumerStatefulWidget> createState() {
     return SerachFindPropertyScreenState();
   }
- 
 }
 
-class SerachFindPropertyScreenState extends  ConsumerState<SerachFindPropertyScreen>   {
+class SerachFindPropertyScreenState extends ConsumerState<SerachFindPropertyScreen> {
   final Dio dio = Dio();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -69,46 +70,46 @@ class SerachFindPropertyScreenState extends  ConsumerState<SerachFindPropertyScr
   String? floorSelect;
   String? roomSelect;
 
+  bool _isBranchLoaded = false;
+
+  late final ProviderSubscription branchListener;
+
   @override
   void initState() {
     super.initState();
-   // getBranch(); // Fetch branch data when the page loads
-   initMockData(); // Initialize mock data for testing
+
+    // เรียก API + ตั้ง listener เมื่อ widget สร้างเสร็จ
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(branchControllerProvider.notifier).fetchBranches();
+
+      // ✅ ใช้ listenManual แทน ref.listen
+      branchListener = ref.listenManual<BranchState>(
+        branchControllerProvider,
+        (previous, next) {
+          if (!_isBranchLoaded && next.branchSerachSuppliesModelResponse != null) {
+            final branchData = next.branchSerachSuppliesModelResponse!;
+            setState(() {
+              dropDownBranchList = branchData.data!
+                  .map((e) => DropDownValueModel(name: e.desc!, value: e.id))
+                  .toList();
+              _isBranchLoaded = true;
+            });
+          }
+
+          if (next.isError) {
+            _showErrorDialog(next.errorMessage);
+          }
+        },
+      );
+    });
   }
 
-
-   void initMockData() {
-    dropDownBranchList = [
-      DropDownValueModel( name: 'สาขา 1', value: '1'),
-      DropDownValueModel( name: 'สาขา 2', value: '2'),
-      DropDownValueModel( name: 'สาขา 3', value: '3'),
-      DropDownValueModel( name: 'สาขา 4', value: '4'),
-    ];
-
-    dropDownBuildingList = [
-      DropDownValueModel( name: 'อาคาร 1', value: '1'),
-      DropDownValueModel( name: 'อาคาร 2', value: '2'),
-      DropDownValueModel( name: 'อาคาร 3', value: '3'),
-      DropDownValueModel( name: 'อาคาร 4', value: '4'),
-    ];
-
-    dropDownFloorList = [
-      DropDownValueModel( name: 'ชั้น 1', value: '1'),
-      DropDownValueModel( name: 'ชั้น 2', value: '2'),
-      DropDownValueModel( name: 'ชั้น 3', value: '3'),
-      DropDownValueModel( name: 'ชั้น 4', value: '4'),
-    ];
-
-     dropDownRoomList = [
-      DropDownValueModel( name: 'ห้อง 1', value: '1'),
-      DropDownValueModel( name: 'ห้อง 2', value: '2'),
-      DropDownValueModel( name: 'ห้อง 3', value: '3'),
-      DropDownValueModel( name: 'ห้อง 4', value: '4'),
-    ];
-  //  _controller.dropDownValue = dropDownBuildingList[0]; // Set default value
+  @override
+  void dispose() {
+    branchListener.close(); // ✅ ปิด listener เมื่อ widget ถูก dispose
+    super.dispose();
   }
 
-  // Error dialog method
   void _showErrorDialog(String message) {
     showDialog(
       context: context,
@@ -127,173 +128,166 @@ class SerachFindPropertyScreenState extends  ConsumerState<SerachFindPropertyScr
 
   @override
   Widget build(BuildContext context) {
+    final branchState = ref.watch(branchControllerProvider);
+
     return Scaffold(
       appBar: CustomAppBar(
         title: "ค้นหาทรัพย์สิน",
         onSuccess: () {
-          Navigator.pop(context); // Handle back action
+          Navigator.pop(context);
         },
       ),
       body: Stack(
         children: [
-          Container(
-            alignment: Alignment.topCenter,
-            width: double.infinity,
-            height: double.infinity,
-            child: SingleChildScrollView(
-              child: Container(
-                padding: EdgeInsets.all(16),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(height: 20),
-                      // Dropdown for สาขา
-                      CustomDropdownFormField(
-                        labelText: "สาขา",
-                        dropDownList: dropDownBranchList,
-                        itemCount: dropDownBranchList.length,
-                        enabled: true,
-                        onChanged: (value) {
-                          setState(() {
-                            branchSelect = value?.toString();
-                            buildingSelect = null;
-                            floorSelect = null;
-                            roomSelect = null;
-                          });
-                        },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please select a branch';
-                          }
-                          return null;
-                        },
-                        inputDecoration: inputDecoration(
-                          nameImage: "lib/assets/icons/ic_svg_user.svg",
-                          context,
-                          hintText: "สาขา",
-                        ),
-                      ),
-                      SizedBox(height: 16),
-                      // Dropdown for อาคาร
-                      CustomDropdownFormField(
-                        labelText: "อาคาร",
-                        dropDownList: dropDownBuildingList,
-                        itemCount: dropDownBuildingList.length,
-                        enabled: true,
-                        onChanged: (value) {
-                          setState(() {
-                            buildingSelect = value?.toString();
-                            floorSelect = null;
-                            roomSelect = null;
-                           
-                          });
-                        },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please select a building';
-                          }
-                          return null;
-                        },
-                        inputDecoration: inputDecoration(
-                          nameImage: "lib/assets/icons/ic_svg_user.svg",
-                          context,
-                          hintText: "อาคาร",
-                        ),
-                      ),
-                      SizedBox(height: 16),
-                      // Dropdown for ชั้น
-                      CustomDropdownFormField(
-                        labelText: 'ชั้น',
-                        dropDownList: dropDownFloorList,
-                        itemCount: dropDownFloorList.length,
-                        enabled: true,
-                        onChanged: (value) {
-                          setState(() {
-                            floorSelect = value?.toString();
-                            roomSelect = null;
-                           
-                          });
-                        },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please select a floor';
-                          }
-                          return null;
-                        },
-                        inputDecoration: inputDecoration(
-                          nameImage: "lib/assets/icons/ic_svg_user.svg",
-                          context,
-                          hintText: "ชั้น",
-                        ),
-                      ),
-                      SizedBox(height: 16),
-                      // Dropdown for พื้นที่/ห้อง
-                      CustomDropdownFormField(
-                        labelText: "พื้นที่/ห้อง",
-                        dropDownList: dropDownRoomList,
-                        itemCount: dropDownRoomList.length,
-                        enabled: true,
-                        onChanged: (value) {
-                          setState(() {
-                            roomSelect = value?.toString();
-                          });
-                        },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please select a room';
-                          }
-                          return null;
-                        },
-                        inputDecoration: inputDecoration(
-                          nameImage: "lib/assets/icons/ic_svg_user.svg",
-                          context,
-                          hintText: "พื้นที่/ห้อง",
-                        ),
-                      ),
-                      SizedBox(height: 16),
-                      SizedBox(height: 24),
-                      // Search button
-                      SizedBox(
-                        width: double.infinity,
-                        height: MediaQuery.of(context).size.height * 0.07,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState?.validate() ?? false) {
-                              // Perform search action
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('กำลังค้นหา...')),
-                              );
-                              Navigator.pushNamed(context, AppRouter.propertyList);
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF4CAF50),
-                            padding: const EdgeInsets.symmetric(vertical: 12.0),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-                          ),
-                          child: Center(
-                            child: Text(
-                              'ค้นหา',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                                color: Colors.white,
+          branchState.isLoading
+              ? Center(child: CircularProgressIndicator())
+              : Container(
+                  alignment: Alignment.topCenter,
+                  width: double.infinity,
+                  height: double.infinity,
+                  child: SingleChildScrollView(
+                    child: Container(
+                      padding: EdgeInsets.all(16),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SizedBox(height: 20),
+                            CustomDropdownFormField(
+                              labelText: "สาขา",
+                              dropDownList: dropDownBranchList,
+                              itemCount: 10,
+                              enabled: true,
+                              onChanged: (value) {
+                                setState(() {
+                                  branchSelect = value?.toString();
+                                  buildingSelect = null;
+                                  floorSelect = null;
+                                  roomSelect = null;
+                                });
+                              },
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please select a branch';
+                                }
+                                return null;
+                              },
+                              inputDecoration: inputDecoration(
+                                nameImage: "lib/assets/icons/ic_svg_user.svg",
+                                context,
+                                hintText: "สาขา",
                               ),
                             ),
-                          ),
+                            SizedBox(height: 16),
+                            CustomDropdownFormField(
+                              labelText: "อาคาร",
+                              dropDownList: dropDownBuildingList,
+                              itemCount: dropDownBuildingList.length,
+                              enabled: true,
+                              onChanged: (value) {
+                                setState(() {
+                                  buildingSelect = value?.toString();
+                                  floorSelect = null;
+                                  roomSelect = null;
+                                });
+                              },
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please select a building';
+                                }
+                                return null;
+                              },
+                              inputDecoration: inputDecoration(
+                                nameImage: "lib/assets/icons/ic_svg_user.svg",
+                                context,
+                                hintText: "อาคาร",
+                              ),
+                            ),
+                            SizedBox(height: 16),
+                            CustomDropdownFormField(
+                              labelText: 'ชั้น',
+                              dropDownList: dropDownFloorList,
+                              itemCount: dropDownFloorList.length,
+                              enabled: true,
+                              onChanged: (value) {
+                                setState(() {
+                                  floorSelect = value?.toString();
+                                  roomSelect = null;
+                                });
+                              },
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please select a floor';
+                                }
+                                return null;
+                              },
+                              inputDecoration: inputDecoration(
+                                nameImage: "lib/assets/icons/ic_svg_user.svg",
+                                context,
+                                hintText: "ชั้น",
+                              ),
+                            ),
+                            SizedBox(height: 16),
+                            CustomDropdownFormField(
+                              labelText: "พื้นที่/ห้อง",
+                              dropDownList: dropDownRoomList,
+                              itemCount: dropDownRoomList.length,
+                              enabled: true,
+                              onChanged: (value) {
+                                setState(() {
+                                  roomSelect = value?.toString();
+                                });
+                              },
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please select a room';
+                                }
+                                return null;
+                              },
+                              inputDecoration: inputDecoration(
+                                nameImage: "lib/assets/icons/ic_svg_user.svg",
+                                context,
+                                hintText: "พื้นที่/ห้อง",
+                              ),
+                            ),
+                            SizedBox(height: 24),
+                            SizedBox(
+                              width: double.infinity,
+                              height: MediaQuery.of(context).size.height * 0.07,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  if (_formKey.currentState?.validate() ?? false) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text('กำลังค้นหา...')),
+                                    );
+                                    Navigator.pushNamed(context, AppRouter.propertyList);
+                                  }
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFF4CAF50),
+                                  padding: const EdgeInsets.symmetric(vertical: 12.0),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8.0)),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'ค้นหา',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-            ),
-          ),
         ],
       ),
     );
