@@ -88,12 +88,12 @@ class SerachFindPropertyScreenState extends ConsumerState<SerachFindPropertyScre
         (previous, next) {
           if (!_isBranchLoaded && next.branchSerachSuppliesModelResponse != null) {
             final branchData = next.branchSerachSuppliesModelResponse!;
-            setState(() {
+            //setState(() {
               dropDownBranchList = branchData.data!
                   .map((e) => DropDownValueModel(name: e.desc!, value: e.id))
                   .toList();
               _isBranchLoaded = true;
-            });
+           // });
           }
 
           if (next.isError) {

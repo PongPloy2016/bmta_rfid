@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:bmta/app_router.dart';
 import 'package:bmta/models/main/menu_items_card.dart';
 import 'package:bmta/models/pokemon.dart';
-import 'package:bmta/srceens/detail_page.dart';
 import 'package:bmta/srceens/serachSupplies/serach_supplise_sreen.dart';
 import 'package:bmta/themes/colors.dart';
 import 'package:bmta/widgets/appbar/custom_app_bar.dart';

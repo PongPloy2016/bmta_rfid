@@ -438,26 +438,16 @@ class _SearchRfidScreenState extends State<SearchRfidScreen> {
             children: [
               CustomTextFormField(
                 controller: trackingIdController,
-                hintText: 'เลขที่เอกสาร',
+                hintText: 'หมายเลขครุภัณฑ์',
                 obscureText: false,
                 inputDecoration:inputDecoration(context,
                   nameImage: "lib/assets/icons/ic_svg_user.svg",
-                  hintText: 'เลขที่เอกสาร',
+                  hintText: 'หมายเลขครุภัณฑ์',
                 ),
               ),
               SizedBox(height: 10),
               CustomTextFormField(
                 controller: subjectController,
-                hintText: 'ชื่อเอกสาร',
-                obscureText: false,
-                inputDecoration: inputDecoration(context,
-                  nameImage: "lib/assets/icons/ic_svg_user.svg",
-                  hintText: 'ชื่อเอกสาร',
-                ),
-              ),
-              SizedBox(height: 10),
-              CustomTextFormField(
-                controller: tagIdController,
                 hintText: 'TAG ID',
                 obscureText: false,
                 inputDecoration: inputDecoration(context,
@@ -465,38 +455,86 @@ class _SearchRfidScreenState extends State<SearchRfidScreen> {
                   hintText: 'TAG ID',
                 ),
               ),
+              SizedBox(height: 10),
+              CustomTextFormField(
+                controller: tagIdController,
+                hintText: 'MAC Address',
+                obscureText: false,
+                inputDecoration: inputDecoration(context,
+                  nameImage: "lib/assets/icons/ic_svg_user.svg",
+                  hintText: 'MAC Address',
+                ),
+              ),
               SizedBox(height: 20),
-             SizedBox(
-                        width: double.infinity,
-                        height: MediaQuery.of(context).size.height * 0.07,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            //if (_formKey.currentState?.validate() ?? false) {
-                              // Do the search action
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('กำลังค้นหา...')),
-                              );
-                              Navigator.pushNamed(context, AppRouter.propertyList);
-                           // }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF4CAF50),
-                            padding: const EdgeInsets.symmetric(vertical: 12.0),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-                          ),
-                          child: Center(
-                            child: Text(
-                              'บันทึก',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                                color: Colors.white,
+             Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+               children: [
+                 SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            height: MediaQuery.of(context).size.height * 0.07,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                //if (_formKey.currentState?.validate() ?? false) {
+                                  // Do the search action
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text('กำลังค้นหา...')),
+                                  );
+                                  Navigator.pushNamed(context, AppRouter.serachFindProperty);
+                               // }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF4CAF50),
+                                padding: const EdgeInsets.symmetric(vertical: 12.0),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'ถัดไป',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      )
+
+                           SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.4 ,
+                            height: MediaQuery.of(context).size.height * 0.07,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                //if (_formKey.currentState?.validate() ?? false) {
+                                  // Do the search action
+                                trackingIdController.clear();
+                                subjectController.clear();
+                                tagIdController.clear();
+                                
+                               // }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color.fromARGB(255, 255, 0, 0),
+                                padding: const EdgeInsets.symmetric(vertical: 12.0),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'ล้างข้อมูล',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+               ],
+             )
             ],
           ),
         ),
