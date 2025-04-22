@@ -1,7 +1,6 @@
 import 'package:bmta_rfid_app/srceens/equipmentDetail/equipmentDetailScreen.dart';
 import 'package:bmta_rfid_app/srceens/equipmentList/equipmentListScreen.dart';
 import 'package:bmta_rfid_app/srceens/mainPage/main_screen.dart';
-import 'package:bmta_rfid_app/srceens/serachSupplies/serach_supplise_sreen.dart';
 import 'package:bmta_rfid_app/themes/colors.dart';
 import 'package:bmta_rfid_app/themes/fontsize.dart';
 import 'package:flutter/material.dart';

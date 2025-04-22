@@ -1,6 +1,3 @@
-import 'package:bmta_rfid_app/themes/colors.dart';
-import 'package:bmta_rfid_app/themes/fontsize.dart';
-import 'package:bmta_rfid_app/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextFormField extends StatelessWidget {

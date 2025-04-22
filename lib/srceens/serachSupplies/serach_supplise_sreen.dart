@@ -1,10 +1,7 @@
 
 import 'package:bmta_rfid_app/app_router.dart';
-import 'package:bmta_rfid_app/provider/serach_find_property_provider.dart';
 import 'package:bmta_rfid_app/repository/rfid_serach_supplies_repository.dart';
-import 'package:bmta_rfid_app/themes/fontsize.dart';
 import 'package:bmta_rfid_app/widgets/appbar/custom_app_bar.dart';
-import 'package:bmta_rfid_app/widgets/custom_text_default.dart';
 import 'package:bmta_rfid_app/widgets/dropdown/custom_dropdown_form_field.dart';
 import 'package:bmta_rfid_app/widgets/textFrom/custom_text_form_field.dart';
 import 'package:bmta_rfid_app/widgets/widgets.dart';

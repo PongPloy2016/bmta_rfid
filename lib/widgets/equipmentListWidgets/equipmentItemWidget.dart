@@ -1,6 +1,5 @@
 // สร้าง Widget สำหรับแสดงข้อมูลแต่ละรายการ
 import 'package:bmta_rfid_app/models/equipmentItemModel/equipmentItem.dart';
-import 'package:bmta_rfid_app/srceens/equipmentList/equipmentListScreen.dart';
 import 'package:flutter/material.dart';
 
 class EquipmentItemWidget extends StatelessWidget {

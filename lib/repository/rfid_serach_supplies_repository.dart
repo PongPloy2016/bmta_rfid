@@ -1,18 +1,11 @@
 import 'dart:convert';
 
-import 'package:bmta_rfid_app/constants/authen_storage_constant.dart';
-import 'package:bmta_rfid_app/models/auth/reqlogin.dart';
-import 'package:bmta_rfid_app/models/auth/res_login_model.dart';
-import 'package:bmta_rfid_app/models/equipmentItemModel/mockup_memo_model.dart';
-import 'package:bmta_rfid_app/models/equipmentItemModel/reqMemoList.dart';
 import 'package:bmta_rfid_app/models/memoDataClassification/memo_data_classification_model.dart';
-import 'package:bmta_rfid_app/models/pokemon.dart';
 import 'package:bmta_rfid_app/Interface/rfid_repo_interface.dart';
 import 'package:bmta_rfid_app/models/serachSupplies/branch_supplies_model_response.dart';
 import 'package:bmta_rfid_app/utils/auth_utils.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class RFIDSerachSuppliesRepository implements MemoDataClassificationRepoInterface {
@@ -38,7 +31,6 @@ class RFIDSerachSuppliesRepository implements MemoDataClassificationRepoInterfac
     var options = Options(
       headers: {
         'Content-Type': 'application/json',
-        'X-API-KEY': dotenv.env['XAPIKey'] ?? '',
       },
     );
 
@@ -69,6 +61,7 @@ class RFIDSerachSuppliesRepository implements MemoDataClassificationRepoInterfac
   }
 
   
+  @override
   Future<MemoDataClassificationModel> getMemoDataClassification(BuildContext context) async {
     try {
       // Make the GET request using Dio

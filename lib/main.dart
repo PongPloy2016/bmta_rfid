@@ -4,23 +4,14 @@ import 'package:bmta_rfid_app/app_router.dart';
 import 'package:bmta_rfid_app/constants/authen_storage_constant.dart';
 import 'package:bmta_rfid_app/repository/rfid_auth_repository.dart';
 import 'package:bmta_rfid_app/repository/rfid_meno_list_repository.dart';
-import 'package:bmta_rfid_app/srceens/bottomnavpage/navigationBarScreen.dart';
 
-import 'package:bmta_rfid_app/srceens/equipmentList/equipmentListScreen.dart';
-import 'package:bmta_rfid_app/srceens/login/login_screen.dart';
-import 'package:bmta_rfid_app/srceens/mainPage/main_screen.dart';
-import 'package:bmta_rfid_app/srceens/serachSupplies/serach_supplise_sreen.dart';
-import 'package:bmta_rfid_app/themes/custom_theme.dart';
-import 'package:bmta_rfid_app/app_router.dart';
 import 'package:bmta_rfid_app/themes/custom_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:month_year_picker/month_year_picker.dart';
-import 'package:zebra123/zebra123.dart';
 // Import the generated file
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -28,7 +19,6 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 Future<void> main() async {
     WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: '.env');
   runApp( ProviderScope(
     child: AppConfig(
        

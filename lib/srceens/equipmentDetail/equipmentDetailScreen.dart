@@ -1,6 +1,5 @@
 import 'package:bmta_rfid_app/models/equipmentItemModel/equipmentItem.dart';
 import 'package:bmta_rfid_app/widgets/appbar/custom_app_bar.dart';
-import 'package:bmta_rfid_app/widgets/equipmentListWidgets/equipmentItemWidget.dart';
 import 'package:flutter/material.dart';
 
 class EquipmentDetailScreen extends StatefulWidget {

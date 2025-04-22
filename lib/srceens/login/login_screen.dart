@@ -1,22 +1,14 @@
 
-import 'package:bmta_rfid_app/app_config.dart';
 import 'package:bmta_rfid_app/app_router.dart';
 import 'package:bmta_rfid_app/models/auth/reqlogin.dart';
-import 'package:bmta_rfid_app/Interface/rfid_repo_interface.dart';
 import 'package:bmta_rfid_app/provider/auth_provider.dart';
-import 'package:bmta_rfid_app/srceens/bottomnavpage/navigationBarScreen.dart';
-import 'package:bmta_rfid_app/srceens/login/logo_create_pin.dart';
-import 'package:bmta_rfid_app/themes/colors.dart';
 import 'package:bmta_rfid_app/themes/fontsize.dart';
-import 'package:bmta_rfid_app/widgets/button/buttons.dart';
 import 'package:bmta_rfid_app/widgets/custom_text_default.dart';
-import 'package:bmta_rfid_app/widgets/logo_welcome.dart';
 import 'package:bmta_rfid_app/widgets/textFrom/custom_text_form_field.dart';
 import 'package:bmta_rfid_app/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:nb_utils/nb_utils.dart';
 // สำหรับ kIsWeb และ defaultTargetPlatform
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -117,7 +109,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               onPressed: () {
                                 setState(() => isIconTrue = !isIconTrue);
                               },
-                              icon: Icon(isIconTrue ? Icons.visibility : Icons.visibility_off, size: 16, color: gray),
+                              icon: Icon(isIconTrue ? Icons.visibility : Icons.visibility_off, size: 16, color: Colors.grey),
                             ),
                           ),
                         ),
@@ -128,7 +120,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           },
                           child: Text(
                             'ลืมรหัสผ่าน ?',
-                            style: boldTextStyle().copyWith(decoration: TextDecoration.underline),
+                            style: const TextStyle(fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
                           ),
                         ),
                         const SizedBox(height: 8),

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:bmta_rfid_app/themes/colors.dart';
 import 'package:bmta_rfid_app/themes/fontsize.dart';
-import 'package:bmta_rfid_app/widgets/widgets.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/foundation.dart';

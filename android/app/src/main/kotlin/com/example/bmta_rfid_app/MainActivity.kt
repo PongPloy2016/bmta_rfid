@@ -1,4 +1,4 @@
-package com.example.zerbra123_flutter
+package com.example.bmta_rfid_app
 
 import io.flutter.embedding.android.FlutterActivity
 

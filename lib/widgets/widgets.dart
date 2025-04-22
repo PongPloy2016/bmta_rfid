@@ -1,7 +1,8 @@
 import 'package:bmta_rfid_app/themes/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:nb_utils/nb_utils.dart';
+
+const double defaultRadius = 8.0; // Define a default radius value
 
 InputDecoration inputDecoration(
   BuildContext context, {
@@ -16,10 +17,10 @@ InputDecoration inputDecoration(
     counterText: "",
     contentPadding: const EdgeInsets.only(left: 12, bottom: 10, top: 10, right: 10),
     labelText: labelText,
-    labelStyle: secondaryTextStyle(),
+    labelStyle: TextStyle(color: Colors.grey, fontSize: 14), // Replace with appropriate style
     alignLabelWithHint: true,
-    hintText: hintText?.validate(),
-    hintStyle: secondaryTextStyle(),
+    hintText: hintText,
+    hintStyle: TextStyle(color: Colors.grey, fontSize: 12), // Replace with appropriate style
     isDense: true, // Make sure it's compact
     prefixIcon: Padding(
       padding: const EdgeInsetsDirectional.only(start: 12.0 , end: 12.0),
@@ -29,23 +30,23 @@ InputDecoration inputDecoration(
         height: 10,
       ),
     ),
-    suffixIcon: suffixIcon?.validate(),
+    suffixIcon: suffixIcon,
     enabledBorder: OutlineInputBorder(
-      borderRadius: radius(borderRadius ?? defaultRadius),
+      borderRadius: BorderRadius.circular(borderRadius ?? defaultRadius),
       borderSide: const BorderSide(color: Colors.transparent, width: 0.0),
     ),
     focusedErrorBorder: OutlineInputBorder(
-      borderRadius: radius(borderRadius ?? defaultRadius),
+      borderRadius: BorderRadius.circular(borderRadius ?? defaultRadius),
       borderSide: const BorderSide(color: Colors.red, width: 0.0),
     ),
     errorBorder: OutlineInputBorder(
-      borderRadius: radius(borderRadius ?? defaultRadius),
+      borderRadius: BorderRadius.circular(borderRadius ?? defaultRadius),
       borderSide: const BorderSide(color: Colors.red, width: 1.0),
     ),
     errorMaxLines: 2, // Limit the error text lines
-    errorStyle: primaryTextStyle(color: Colors.red, size: 12),
+    errorStyle: TextStyle(color: Colors.red, fontSize: 12),
     focusedBorder: OutlineInputBorder(
-      borderRadius: radius(borderRadius ?? defaultRadius),
+      borderRadius: BorderRadius.circular(borderRadius ?? defaultRadius),
       borderSide: const BorderSide(color: Colors.transparent, width: 0.0),
     ),
     filled: true,

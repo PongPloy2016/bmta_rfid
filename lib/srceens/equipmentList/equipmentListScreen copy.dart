@@ -1,10 +1,8 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:bmta_rfid_app/Interface/rfid_repo_interface.dart';
 import 'package:bmta_rfid_app/app_router.dart';
 import 'package:bmta_rfid_app/models/equipmentItemModel/equipmentItem.dart';
-import 'package:bmta_rfid_app/models/equipmentItemModel/mockup_memo_model.dart';
 import 'package:bmta_rfid_app/models/equipmentItemModel/reqMemoList.dart';
 import 'package:bmta_rfid_app/repository/rfid_meno_list_repository.dart';
 import 'package:bmta_rfid_app/widgets/appbar/custom_app_bar.dart';

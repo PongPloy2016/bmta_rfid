@@ -3,9 +3,6 @@ import 'dart:async';
 import 'package:bmta_rfid_app/Interface/rfid_repo_interface.dart';
 import 'package:bmta_rfid_app/models/auth/reqlogin.dart';
 import 'package:bmta_rfid_app/models/auth/res_login_model.dart';
-import 'package:bmta_rfid_app/models/equipmentItemModel/equipmentItem.dart';
-import 'package:bmta_rfid_app/models/equipmentItemModel/reqMemoList.dart';
-import 'package:bmta_rfid_app/provider/data_provider.dart';
 import 'package:bmta_rfid_app/repository/rfid_auth_repository.dart';
 import 'package:riverpod/riverpod.dart';
 

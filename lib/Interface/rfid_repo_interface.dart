@@ -6,7 +6,6 @@ import 'package:bmta_rfid_app/models/auth/res_login_model.dart';
 import 'package:bmta_rfid_app/models/equipmentItemModel/mockup_memo_model.dart';
 import 'package:bmta_rfid_app/models/equipmentItemModel/reqMemoList.dart';
 import 'package:bmta_rfid_app/models/memoDataClassification/memo_data_classification_model.dart';
-import 'package:bmta_rfid_app/models/pokemon.dart';
 import 'package:flutter/material.dart';
 
 

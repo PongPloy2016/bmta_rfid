@@ -1,11 +1,5 @@
 
-import 'package:bmta_rfid_app/constants/authen_storage_constant.dart';
-import 'package:bmta_rfid_app/models/auth/reqlogin.dart';
-import 'package:bmta_rfid_app/models/auth/res_login_model.dart';
-import 'package:bmta_rfid_app/models/equipmentItemModel/mockup_memo_model.dart';
-import 'package:bmta_rfid_app/models/equipmentItemModel/reqMemoList.dart';
 import 'package:bmta_rfid_app/models/memoDataClassification/memo_data_classification_model.dart';
-import 'package:bmta_rfid_app/models/pokemon.dart';
 import 'package:bmta_rfid_app/Interface/rfid_repo_interface.dart';
 import 'package:bmta_rfid_app/utils/auth_utils.dart';
 import 'package:dio/dio.dart';
@@ -23,6 +17,7 @@ class RFIDMenoListRepository implements MemoDataClassificationRepoInterface {
 
   // Call this function to load data from API using Dio
    // Method to get MemoDataClassification and return Future<MemoDataClassificationModel>
+  @override
   Future<MemoDataClassificationModel> getMemoDataClassification(BuildContext context) async {
     try {
       // Make the GET request using Dio

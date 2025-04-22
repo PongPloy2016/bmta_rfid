@@ -1,13 +1,9 @@
 
 import 'package:bmta_rfid_app/app_router.dart';
 import 'package:bmta_rfid_app/models/main/menu_items_card.dart';
-import 'package:bmta_rfid_app/models/pokemon.dart';
-import 'package:bmta_rfid_app/srceens/serachSupplies/serach_supplise_sreen.dart';
 import 'package:bmta_rfid_app/themes/colors.dart';
-import 'package:bmta_rfid_app/widgets/appbar/custom_app_bar.dart';
 import 'package:bmta_rfid_app/widgets/main/mainListItem.dart';
 import 'package:bmta_rfid_app/widgets/main/menuItemCardWidget.dart';
-import 'package:bmta_rfid_app/widgets/text/custom_text.dart';
 import 'package:flutter/material.dart';
 
 class MainPageScreen extends StatefulWidget {
