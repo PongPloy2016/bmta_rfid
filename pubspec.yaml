@@ -11,10 +11,37 @@ dependencies:
     sdk: flutter
   zebra123: ^4.0.0
 
+  flutter_dotenv: any
+  flutter_riverpod: any
+  flutter_screenutil: any
+  flutter_secure_storage: any
+  month_year_picker: any
+  json_annotation: any
+  riverpod: any
+  equatable: any
+  dio: any
+  http: any
+  shared_preferences: any
+  flutter_svg: any
+  local_auth: any
+  nb_utils: any
+  provider: any
+  dropdown_textfield: any
+  quickalert: any
+  connectivity_plus: any
+  package_info_plus: any
+  url_launcher: any
+  fluttertoast: any
+  tuple: any
+  dropdown_button2: any
+  bmta: any
+  intl: any
+  flutter_localizations: any
+  zebra_rfid_reader_sdk: any
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
 
 flutter:
   uses-material-design: true

@@ -1,403 +1,152 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:zebra123/zebra123.dart';
 
-void main() {
-   runApp(const MyApp());
+import 'package:bmta_rfid_app/app_config.dart';
+import 'package:bmta_rfid_app/app_router.dart';
+import 'package:bmta_rfid_app/constants/authen_storage_constant.dart';
+import 'package:bmta_rfid_app/repository/rfid_auth_repository.dart';
+import 'package:bmta_rfid_app/repository/rfid_meno_list_repository.dart';
+import 'package:bmta_rfid_app/srceens/bottomnavpage/navigationBarScreen.dart';
+
+import 'package:bmta_rfid_app/srceens/equipmentList/equipmentListScreen.dart';
+import 'package:bmta_rfid_app/srceens/login/login_screen.dart';
+import 'package:bmta_rfid_app/srceens/mainPage/main_screen.dart';
+import 'package:bmta_rfid_app/srceens/serachSupplies/serach_supplise_sreen.dart';
+import 'package:bmta_rfid_app/themes/custom_theme.dart';
+import 'package:bmta_rfid_app/app_router.dart';
+import 'package:bmta_rfid_app/themes/custom_theme.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:month_year_picker/month_year_picker.dart';
+import 'package:zebra123/zebra123.dart';
+// Import the generated file
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+
+Future<void> main() async {
+    WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: '.env');
+  runApp( ProviderScope(
+    child: AppConfig(
+       
+      authRepo : RFIDAuthRepository(),
+          listhRepo: RFIDMenoListRepository(),
+          
+          child:  const MyApp()
+      ),
+  ));
 }
+
+
 
 enum Views { list, write }
 
 class MyApp extends StatefulWidget {
-   const MyApp({super.key});
+  const MyApp({super.key});
 
-   @override
-   State<MyApp> createState() => _MyAppState();
+  @override
+  State<MyApp> createState() => _MyAppState();
 }
 
+
 class _MyAppState extends State<MyApp> {
-   Zebra123? zebra123;
-   Interfaces interface = Interfaces.unknown;
-   Status connectionStatus = Status.disconnected;
-   List<Barcode> barcodes = [];
+  late Future<Map<String, dynamic>> _loginStatus;
 
-   List<RfidTag> tags = [];
-   RfidTag? tag;
+  @override
+  void initState() {
+    super.initState();
+    _loginStatus = hasLoggedIn(); // ตรวจสอบสถานะการล็อกอิน
+  }
 
-   bool scanning = false;
-   bool tracking = false;
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isTablet = constraints.maxWidth >= 600;
 
-   Views view = Views.list;
+        return ScreenUtilInit(
+          designSize: isTablet ? const Size(600, 800) : const Size(375, 812),
+          minTextAdapt: true,
+          builder: (context, child) {
+            double textScaleFactor = MediaQuery.of(context).textScaleFactor;
+            if (textScaleFactor > 1.125) {
+              textScaleFactor = 1.125;
+            }
 
-   @override
-   void initState() {
-      zebra123 = Zebra123(callback: callback);
-      super.initState();
-   }
+            return FutureBuilder<Map<String, dynamic>>(
+              future: _loginStatus,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(color: Colors.blue),
+                  );
+                }
 
-   void startScanning() {
-      zebra123?.startScanning();
-      tags.clear();
-      setState(() {
-         scanning = true;
-         tracking = false;
-      });
-   }
+                if (snapshot.hasError) {
+                  debugPrint("Error in FutureBuilder: ${snapshot.error}");
+                  return SafeArea(
+                    child: Center(
+                      child: Text('Error: ${snapshot.error}'),
+                    ),
+                  );
+                }
 
-   void stopScanning() {
-      zebra123?.stopScanning();
-      setState(() {
-         scanning = false;
-         tracking = false;
-      });
-   }
+                final data = snapshot.data ?? {'isLoggedIn': false, 'userId': null};
+                final initialRoute = data['isLoggedIn'] == true ? AppRouter.navigationBar : AppRouter.login;
 
-   void startTracking(List<String> tags) {
-      zebra123?.startTracking(tags);
-      setState(() {
-         scanning = false;
-         tracking = true;
-      });
-   }
-
-   void stopTracking() {
-      zebra123?.stopTracking();
-      setState(() {
-         scanning = false;
-         tracking = false;
-      });
-   }
-
-   void stop() {
-      if (scanning) stopScanning();
-      if (tracking) stopTracking();
-   }
-
-   Widget _listView() {
-      List<Widget> children = [];
-
-      var pad = const Padding(padding: EdgeInsets.only(left: 10));
-
-      Widget connectBtn;
-      if (zebra123?.connectionStatus == Status.connected) {
-         connectBtn = FloatingActionButton(
-                 backgroundColor: Colors.lightGreenAccent,
-                 onPressed: () => zebra123?.disconnect(),
-                 child: const Text("Disconnect",
-                         style: TextStyle(color: Colors.black, fontSize: 16)));
-      } else {
-         connectBtn = FloatingActionButton(
-                 backgroundColor: Colors.redAccent.shade100,
-                 onPressed: () => zebra123?.connect(),
-                 child: const Text("Connect",
-                         style: TextStyle(color: Colors.black, fontSize: 16)));
-      }
-      connectBtn = Padding(
-              padding: const EdgeInsets.only(left: 5, right: 5),
-              child: SizedBox(width: 100, height: 50, child: connectBtn));
-
-      Widget scanBtn = const Offstage();
-      if (zebra123?.connectionStatus == Status.connected &&
-              !scanning &&
-              !tracking) {
-         scanBtn = FloatingActionButton(
-                 backgroundColor: Colors.lightGreenAccent,
-                 onPressed: () => startScanning(),
-                 child: const Text("Scan",
-                         style: TextStyle(color: Colors.black, fontSize: 16)));
-         scanBtn = Padding(
-                 padding: const EdgeInsets.only(left: 5, right: 5),
-                 child: SizedBox(width: 75, height: 50, child: scanBtn));
-      }
-
-      Widget stopBtn = const Offstage();
-      if (scanning || tracking) {
-         stopBtn = FloatingActionButton(
-                 backgroundColor: Colors.redAccent.shade100,
-                 onPressed: () => stop(),
-                 child: const Text("Stop",
-                         style: TextStyle(color: Colors.black, fontSize: 16)));
-         stopBtn = Padding(
-                 padding: const EdgeInsets.only(left: 5, right: 5),
-                 child: SizedBox(width: 75, height: 50, child: stopBtn));
-      }
-
-      var buttons = Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [connectBtn, scanBtn, stopBtn]);
-      children.add(buttons);
-
-      List<Widget> results = [];
-      for (var barcode in barcodes) {
-         var t1 = Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-            const Text("Barcode:"),
-            pad,
-            Text(barcode.barcode,
-                    style: const TextStyle(fontWeight: FontWeight.bold))
-         ]);
-         var t2 = Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-            const Text("Format:"),
-            pad,
-            Text(barcode.format,
-                    style: const TextStyle(fontWeight: FontWeight.bold))
-         ]);
-         var t3 = Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-            const Text("Seen:"),
-            pad,
-            Text(barcode.seen, style: const TextStyle(fontWeight: FontWeight.bold))
-         ]);
-         var t4 = Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-            const Text("Interface:"),
-            pad,
-            Text("${barcode.interface}",
-                    style: const TextStyle(fontWeight: FontWeight.bold))
-         ]);
-         var subtitle = Column(
-                 mainAxisSize: MainAxisSize.min,
-                 crossAxisAlignment: CrossAxisAlignment.start,
-                 children: [t1, t2, t3, t4]);
-         results.add(ListTile(
-                 leading: const Icon(Icons.barcode_reader),
-                 subtitle: SingleChildScrollView(
-                         scrollDirection: Axis.horizontal, child: subtitle)));
-      }
-      for (var tag in tags) {
-         var t1 = Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-            const Text("Tag:"),
-            pad,
-            Text(tag.epc, style: const TextStyle(fontWeight: FontWeight.bold))
-         ]);
-         var t2 = Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-            const Text("Rssi:"),
-            pad,
-            Text("${tag.rssi}", style: const TextStyle(fontWeight: FontWeight.bold))
-         ]);
-         var t3 = Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-            const Text("Seen:"),
-            pad,
-            Text(tag.seen, style: const TextStyle(fontWeight: FontWeight.bold))
-         ]);
-         var t4 = Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-            const Text("Interface:"),
-            pad,
-            Text("${tag.interface}",
-                    style: const TextStyle(fontWeight: FontWeight.bold))
-         ]);
-
-         Widget writeBtn = OutlinedButton(
-                 child: const Text("Write",
-                         style: TextStyle(color: Colors.black, fontSize: 16)),
-                 onPressed: () {
-                    setState(() {
-                       this.tag = tag;
-                       view = Views.write;
-                    });
-                 });
-         writeBtn = SizedBox(width: 100, height: 35, child: writeBtn);
-
-         Widget trackBtn = OutlinedButton(
-                 onPressed: () => _trackTag(tag.epc),
-                 child: const Text("Track",
-                         style: TextStyle(color: Colors.black, fontSize: 16)));
-         trackBtn = SizedBox(width: 100, height: 35, child: trackBtn);
-
-         Widget t5 = Padding(
-                 padding: const EdgeInsets.only(top: 10),
-                 child: Row(
-                         mainAxisAlignment: MainAxisAlignment.center,
-                         children: [writeBtn, pad, trackBtn]));
-         if (tracking) {
-            t5 = const Offstage();
-         }
-
-         var subtitle = Column(
-                 mainAxisSize: MainAxisSize.min,
-                 crossAxisAlignment: CrossAxisAlignment.start,
-                 children: [t1, t2, t3, t4, t5]);
-
-         results.add(ListTile(
-                 leading: const Icon(Icons.barcode_reader),
-                 subtitle: SingleChildScrollView(
-                         scrollDirection: Axis.horizontal, child: subtitle)));
-      }
-      children.addAll(results);
-
-      return Column(mainAxisSize: MainAxisSize.min, children: children);
-   }
-
-   void _writeTag() {
-      var epc = tag?.epc ?? "";
-      var epcNew = tag?.epcNew ?? "";
-      var data = tag?.memoryBankData ?? "";
-      var password = double.tryParse(tag?.password ?? "");
-      var passwordNew = double.tryParse(tag?.passwordNew ?? tag?.password ?? "");
-      zebra123?.writeTag(epc,
-              epcNew: epcNew,
-              password: password,
-              passwordNew: passwordNew,
-              data: data);
-   }
-
-   void _trackTag(String epc) {
-      startTracking([epc]);
-   }
-
-   Widget _writeView() {
-      List<Widget> children = [];
-
-      var pad = const Padding(padding: EdgeInsets.only(left: 10));
-
-      Widget quitBtn = FloatingActionButton(
-              backgroundColor: Colors.lightGreenAccent,
-              onPressed: () {
-                 setState(() {
-                    view = Views.list;
-                 });
+                return MaterialApp(
+                  navigatorKey: navigatorKey,
+                  theme: customTheme,
+                  initialRoute: initialRoute,
+                  routes: AppRouter.routes,
+                  localizationsDelegates: const [
+                    GlobalMaterialLocalizations.delegate,
+                    GlobalWidgetsLocalizations.delegate,
+                    GlobalCupertinoLocalizations.delegate,
+                    MonthYearPickerLocalizations.delegate,
+                  ],
+                  supportedLocales: const [
+                    Locale('th', ''),
+                    Locale('en', ''),
+                  ],
+                  builder: (context, child) {
+                    return MediaQuery(
+                      data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(textScaleFactor)),
+                      child: child!,
+                    );
+                  },
+                );
               },
-              child: const Text("Quit",
-                      style: TextStyle(color: Colors.black, fontSize: 16)));
-      quitBtn = SizedBox(width: 75, height: 50, child: quitBtn);
+            );
+          },
+        );
+      },
+    );
+  }
 
-      Widget writeBtn = FloatingActionButton(
-              backgroundColor: Colors.lightGreenAccent,
-              onPressed: () => _writeTag(),
-              child: const Text("Write",
-                      style: TextStyle(color: Colors.black, fontSize: 16)));
-      writeBtn = SizedBox(width: 75, height: 50, child: writeBtn);
 
-      var buttons = Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [writeBtn, pad, quitBtn]);
-      children.add(buttons);
+  /// ฟังก์ชันตรวจสอบสถานะการล็อกอิน
+Future<Map<String, dynamic>> hasLoggedIn() async {
+  const storage = FlutterSecureStorage();
+  try {
+    final empId = await storage.read(key: AuthStorage.empIdKey);
+    final userId = await storage.read(key: AuthStorage.idKey);
+    final isLoggedIn = await storage.read(key: AuthStorage.isLoggedInKey);
 
-      var t1 = Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-         const Text("ID (old):"),
-         pad,
-         SizedBox(
-                 width: 250,
-                 height: 50,
-                 child: Text(tag?.epc ?? "",
-                         style: const TextStyle(fontWeight: FontWeight.bold)))
-      ]);
-      children.add(t1);
+    return {
+      'isLoggedIn':
+      //  empId?.isNotEmpty == true &&
+      //     isLoggedIn?.isNotEmpty == true &&
+          isLoggedIn == 'true',
+     // 'userId': userId,
+    };
+  } catch (e) {
+    debugPrint("Error checking login status: $e");
+    return {'isLoggedIn': false, 'userId': null};
+  }
+}
 
-      var c2 = TextEditingController(text: tag?.epc ?? "");
-      var t2 = Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-         const Text("ID (new):"),
-         pad,
-         SizedBox(
-                 width: 250,
-                 height: 50,
-                 child: TextField(
-                         controller: c2,
-                         onChanged: (value) => tag?.epcNew = value,
-                         style: const TextStyle(fontWeight: FontWeight.bold)))
-      ]);
-      children.add(t2);
-
-      var c3 = TextEditingController(text: tag?.epc ?? "");
-      var t3 = Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-         const Text("Data:"),
-         pad,
-         SizedBox(
-                 width: 250,
-                 height: 50,
-                 child: TextField(
-                         controller: c3,
-                         onChanged: (value) => tag?.memoryBankData = value,
-                         style: const TextStyle(fontWeight: FontWeight.bold)))
-      ]);
-      children.add(t3);
-
-      var c4 = TextEditingController(text: "");
-      var t4 = Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-         const Text("Password:"),
-         pad,
-         SizedBox(
-                 width: 250,
-                 height: 50,
-                 child: TextField(
-                         controller: c4,
-                         onChanged: (value) => tag?.password = value,
-                         style: const TextStyle(fontWeight: FontWeight.bold)))
-      ]);
-      children.add(t4);
-
-      return Column(mainAxisSize: MainAxisSize.min, children: children);
-   }
-
-   @override
-   Widget build(BuildContext context) {
-      Widget child = view == Views.write ? _writeView() : _listView();
-
-      return MaterialApp(
-         home: Scaffold(
-            appBar: AppBar(
-               title: const Text('Zebra123 Plugin Example'),
-            ),
-            body:
-            SingleChildScrollView(scrollDirection: Axis.vertical, child: child),
-         ),
-      );
-   }
-
-   void callback(Interfaces interface, Events event, dynamic data) {
-      this.interface = interface;
-
-      switch (event) {
-         case Events.readBarcode:
-            barcodes.clear();
-            if (data is List<Barcode>) {
-               for (Barcode barcode in data) {
-                  barcodes.add(barcode);
-                  if (kDebugMode) {
-                     print(
-                             "Barcode: ${barcode.barcode} Format: ${barcode.format} Seen: ${barcode.seen} Interface: ${barcode.interface} ");
-                  }
-               }
-            }
-            if (interface == Interfaces.datawedge && scanning) scanning = false;
-            setState(() {});
-            break;
-
-         case Events.readRfid:
-            tags.clear();
-            if (data is List<RfidTag>) {
-               for (RfidTag tag in data) {
-                  tags.add(tag);
-                  if (kDebugMode) {
-                     print(
-                             "Tag: ${tag.epc} Rssi: ${tag.rssi}  Seen: ${tag.seen} Interface: ${tag.interface}");
-                  }
-               }
-            }
-            if (interface == Interfaces.datawedge && scanning) scanning = false;
-            setState(() {});
-            break;
-
-         case Events.error:
-            if (data is Error) {
-               if (kDebugMode) print("Interface: $interface Error: ${data.message}");
-            }
-            break;
-
-         case Events.connectionStatus:
-            if (data is ConnectionStatus) {
-               if (kDebugMode) {
-                  print("Interface: $interface ConnectionStatus: ${data.status}");
-               }
-            }
-            if (data.status != connectionStatus) {
-               setState(() {
-                  connectionStatus = data.status;
-               });
-            }
-            break;
-
-         default:
-            if (kDebugMode) {
-               if (kDebugMode) print("Interface: $interface Unknown Event: $event");
-            }
-      }
-   }
 }
