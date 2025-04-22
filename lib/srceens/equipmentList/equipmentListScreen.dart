@@ -1,5 +1,5 @@
 import 'package:bmta_rfid_app/app_router.dart';
-import 'package:bmta_rfid_app/provider/equipment_list_provider.dart';
+import 'package:bmta_rfid_app/provider/controller/equipment_list_controller.dart';
 import 'package:bmta_rfid_app/widgets/equipmentListWidgets/equipmentItemWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

@@ -60,6 +60,47 @@ class RFIDSerachSuppliesRepository implements MemoDataClassificationRepoInterfac
     }
   }
 
+
+  
+    Future<BranchSerachSuppliesModelResponse> getBuilding() async {
+    String url =
+        'https://rfid.uberpod.com/RTLS/rfid/getBuilding';
+
+    // Set headers if necessary (like content type)
+    var options = Options(
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
+
+  
+
+    try {
+      // Make the GET request
+      final response = await dio.post(url, options: options);
+
+      // Check if the request was successful
+      if (response.statusCode == 200) {
+        // Parse the response body into the MockupMemoModel
+        var memoResponse = BranchSerachSuppliesModelResponse.fromJson(response.data);
+
+        // Handle the parsed data (for example, print the response data)
+        print('Total Memos: ${jsonEncode(memoResponse.data)}');
+       // print('First Memo Code: ${memoResponse.data[0].desc}');
+
+        return memoResponse;
+      } else {
+        // Handle error response
+        return Future.error('Failed to load memos: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Handle any exceptions that occur during the request
+      return Future.error('Failed to load memos: ${e.toString()}');
+    }
+  }
+
+
+
   
   @override
   Future<MemoDataClassificationModel> getMemoDataClassification(BuildContext context) async {

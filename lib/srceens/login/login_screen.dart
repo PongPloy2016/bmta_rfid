@@ -1,7 +1,8 @@
 
 import 'package:bmta_rfid_app/app_router.dart';
 import 'package:bmta_rfid_app/models/auth/reqlogin.dart';
-import 'package:bmta_rfid_app/provider/auth_provider.dart';
+import 'package:bmta_rfid_app/provider/controller/login_controller.dart';
+import 'package:bmta_rfid_app/provider/state/login_state.dart';
 import 'package:bmta_rfid_app/themes/fontsize.dart';
 import 'package:bmta_rfid_app/widgets/custom_text_default.dart';
 import 'package:bmta_rfid_app/widgets/textFrom/custom_text_form_field.dart';

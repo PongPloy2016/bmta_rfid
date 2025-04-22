@@ -1,5 +1,8 @@
 import 'package:bmta_rfid_app/app_router.dart';
-import 'package:bmta_rfid_app/provider/serach_find_property_provider.dart';
+import 'package:bmta_rfid_app/provider/controller/property_branch_controller.dart';
+import 'package:bmta_rfid_app/provider/controller/property_building_controller.dart';
+import 'package:bmta_rfid_app/provider/state/property_branch_state.dart';
+import 'package:bmta_rfid_app/provider/state/property_building_state.dart';
 import 'package:bmta_rfid_app/widgets/appbar/custom_app_bar.dart';
 import 'package:bmta_rfid_app/widgets/dropdown/custom_dropdown_form_field.dart';
 import 'package:bmta_rfid_app/widgets/widgets.dart';
@@ -66,6 +69,7 @@ class SerachFindPropertyScreenState extends ConsumerState<SerachFindPropertyScre
   bool _isBranchLoaded = false;
 
   late final ProviderSubscription branchListener;
+  late final ProviderSubscription buildingListener;
 
   @override
   void initState() {
@@ -74,19 +78,36 @@ class SerachFindPropertyScreenState extends ConsumerState<SerachFindPropertyScre
     // เรียก API + ตั้ง listener เมื่อ widget สร้างเสร็จ
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(branchControllerProvider.notifier).fetchBranches();
+      ref.read(buildingControllerProvider.notifier).fetchBuliding();
 
       // ✅ ใช้ listenManual แทน ref.listen
-      branchListener = ref.listenManual<BranchState>(
+      branchListener = ref.listenManual<PropertBranchState>(
         branchControllerProvider,
         (previous, next) {
           if (!_isBranchLoaded && next.branchSerachSuppliesModelResponse != null) {
             final branchData = next.branchSerachSuppliesModelResponse!;
-            //setState(() {
+           
               dropDownBranchList = branchData.data!
                   .map((e) => DropDownValueModel(name: e.desc!, value: e.id))
                   .toList();
               _isBranchLoaded = true;
-           // });
+          
+          }
+
+          if (next.isError) {
+            _showErrorDialog(next.errorMessage);
+          }
+        },
+      );
+
+      buildingListener = ref.listenManual<PropertBulidingState>(
+        buildingControllerProvider,
+        (previous, next) {
+          if (next.branchSerachSuppliesModelResponse != null) {
+            final buildingData = next.branchSerachSuppliesModelResponse!;
+            dropDownBuildingList = buildingData.data!
+                .map((e) => DropDownValueModel(name: e.desc!, value: e.id))
+                .toList();
           }
 
           if (next.isError) {

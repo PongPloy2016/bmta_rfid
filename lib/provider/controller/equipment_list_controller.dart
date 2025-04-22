@@ -1,41 +1,19 @@
-import 'package:bmta_rfid_app/models/equipmentItemModel/equipmentItem.dart';
-import 'package:bmta_rfid_app/models/equipmentItemModel/reqMemoList.dart';
-import 'package:bmta_rfid_app/provider/data_provider.dart';
-import 'package:riverpod/riverpod.dart';
 
 import 'dart:math';
 
-import '../repository/rfid_meno_list_repository.dart';
+import 'package:bmta_rfid_app/models/equipmentItemModel/equipmentItem.dart';
+import 'package:bmta_rfid_app/models/equipmentItemModel/reqMemoList.dart';
+import 'package:bmta_rfid_app/provider/data_provider.dart';
+import 'package:bmta_rfid_app/provider/state/equipment_list_state.dart';
+import 'package:bmta_rfid_app/repository/rfid_meno_list_repository.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-// State class to hold the equipment list data, loading, and error states
-class EquipmentListState {
-  final List<EquipmentItem> items;
-  final bool isLoading;
-  final bool isError;
-  final String errorMessage;
-  final bool isLoadingMore;
-
-  EquipmentListState({
-    required this.items,
-    required this.isLoading,
-    required this.isError,
-    required this.errorMessage,
-    required this.isLoadingMore,
-  });
-
-  EquipmentListState.initial()
-      : items = [],
-        isLoading = false,
-        isError = false,
-        errorMessage = "",
-        isLoadingMore = false; // Add the isLoadingMore state
-}
-class EquipmentListNotifier extends StateNotifier<EquipmentListState> {
+class EquipmentListhController extends StateNotifier<EquipmentListState> {
   final RFIDMenoListRepository repository;
   int currentPage = 1;
   final int limit = 15;
 
-  EquipmentListNotifier(this.repository) : super(EquipmentListState.initial());
+  EquipmentListhController(this.repository) : super(EquipmentListState.initial());
 
   // Load equipment list
   Future<void> loadEquipmentList({bool isLoadMore = false}) async {
@@ -115,7 +93,7 @@ class EquipmentListNotifier extends StateNotifier<EquipmentListState> {
 }
 
 final equipmentListProvider =
-    StateNotifierProvider<EquipmentListNotifier, EquipmentListState>((ref) {
+    StateNotifierProvider<EquipmentListhController, EquipmentListState>((ref) {
   final repository = ref.watch(userProvider);
-  return EquipmentListNotifier(repository);
+  return EquipmentListhController(repository);
 });

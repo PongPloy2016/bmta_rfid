@@ -35,7 +35,7 @@ class RFIDAuthRepository implements AuthRepoInterface {
     var options = Options(
       headers: {
         'Content-Type': 'application/json',
-        // 'X-API-KEY': dotenv.env['XAPIKey'] ?? '', // Ensure XAPIKey is properly loaded
+         'X-API-KEY': 'MpJV3sP5dkmGG1wUr7WD6URNpagZYFXoenRZwYn3pXuh3ROS0fZOHDEpyKI1dnKyWuhSQ6yxbBMxZCOfcs7zTfmQ7EhG9Ua0', // Ensure XAPIKey is properly loaded
       },
     );
 

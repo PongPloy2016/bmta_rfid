@@ -1,38 +1,9 @@
-import 'dart:async';
 
 import 'package:bmta_rfid_app/Interface/rfid_repo_interface.dart';
 import 'package:bmta_rfid_app/models/auth/reqlogin.dart';
-import 'package:bmta_rfid_app/models/auth/res_login_model.dart';
+import 'package:bmta_rfid_app/provider/state/login_state.dart';
 import 'package:bmta_rfid_app/repository/rfid_auth_repository.dart';
-import 'package:riverpod/riverpod.dart';
-
-
-
-// State class to hold the equipment list data, loading, and error states
-class LoginState {
-  final ResLoginModel? resLoginModel;
-  final bool isLoading;
-  final bool isError;
-  final String errorMessage;
-
-  LoginState({
-    this.resLoginModel,
-    this.isLoading = false,
-    this.isError = false,
-    this.errorMessage = '',
-  });
-
-  factory LoginState.initial() => LoginState(
-        resLoginModel: ResLoginModel(
-          isSuccess: false,
-          message: "",
-          data: null,
-        ),
-        isLoading: false,
-        isError: false,
-        errorMessage: '',
-      );
-}
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LoginController extends Notifier<LoginState> {
   late final AuthRepoInterface _repo;
