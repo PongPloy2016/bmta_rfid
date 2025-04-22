@@ -5,9 +5,8 @@ import 'package:bmta/app_router.dart';
 import 'package:bmta/constants/authen_storage_constant.dart';
 import 'package:bmta/repository/rfid_auth_repository.dart';
 import 'package:bmta/repository/rfid_meno_list_repository.dart';
-import 'package:bmta/repository/rfid_repository.dart';
 import 'package:bmta/srceens/bottomnavpage/navigationBarScreen.dart';
-import 'package:bmta/srceens/detail_page.dart';
+
 import 'package:bmta/srceens/equipmentList/equipmentListScreen.dart';
 import 'package:bmta/srceens/login/login_screen.dart';
 import 'package:bmta/srceens/mainPage/main_screen.dart';

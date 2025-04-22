@@ -9,7 +9,6 @@ import 'package:bmta/srceens/bottomnavpage/navigationBarScreen.dart';
 import 'package:bmta/srceens/login/logo_create_pin.dart';
 import 'package:bmta/themes/colors.dart';
 import 'package:bmta/themes/fontsize.dart';
-import 'package:bmta/utils/validator_util.dart';
 import 'package:bmta/widgets/button/buttons.dart';
 import 'package:bmta/widgets/custom_text_default.dart';
 import 'package:bmta/widgets/logo_welcome.dart';

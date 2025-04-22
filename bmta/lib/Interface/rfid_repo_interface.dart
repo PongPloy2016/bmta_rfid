@@ -9,13 +9,7 @@ import 'package:bmta/models/memoDataClassification/memo_data_classification_mode
 import 'package:bmta/models/pokemon.dart';
 import 'package:flutter/material.dart';
 
-abstract class PokemonRepoInterface {
-  void addToFavoritesList(Pokemon pokemon);
-  void addToObtainedList(Pokemon pokemon);
-  Future<List<Pokemon>> getObtainedPokemon();
-  Future<List<Pokemon>> getFavoritesPokemon();
-  Future<List<Pokemon>> getAllPokemon();
-}
+
 
 abstract class AuthRepoInterface {
   Future<ResLoginModel> getLoginUser(Reqlogin reqLogin);
