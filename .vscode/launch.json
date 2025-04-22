@@ -22,24 +22,13 @@
             "flutterMode": "release"
         },
         {
-            "name": "bmta",
-            "cwd": "bmta",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "bmta (profile mode)",
-            "cwd": "bmta",
+            "name": "bmta_rfid (via fvm)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile"
+            "flutterMode": "debug",
+            "toolArgs": [
+              "flutter"
+            ],
         },
-        {
-            "name": "bmta (release mode)",
-            "cwd": "bmta",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "release"
-        }
     ]
 }
