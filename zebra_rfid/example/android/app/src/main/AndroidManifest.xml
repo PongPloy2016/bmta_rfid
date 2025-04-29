@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="bmta_rfid_app"
+        android:label="zebra_rfid_example"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

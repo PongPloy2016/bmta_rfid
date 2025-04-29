@@ -1,4 +1,5 @@
 
+import 'package:bmta_rfid_app/mainRfid.dart';
 import 'package:bmta_rfid_app/srceens/bottomnavpage/navigationBarCustomScreen.dart';
 import 'package:bmta_rfid_app/srceens/equipmentDetail/equipmentDetailScreen.dart';
 import 'package:bmta_rfid_app/srceens/equipmentList/equipmentListScreen.dart';
@@ -26,6 +27,7 @@ class AppRouter {
   static const String propertyList = 'propertyList';
   static const String mappingTagRfid = 'mappingTagRfid';
   static const String searchRfid = 'searchRfid';
+  static const String mainRFID = 'mainRFID';
 
 
   // Router Map
@@ -44,6 +46,7 @@ class AppRouter {
     propertyList: (context) => PropertyListingScreen(),
     searchRfid: (context) => SearchRfidScreen(),
     mappingTagRfid: (context) => MappingTagRfidScreen(data: MemoItem(memoCode: '', subject: '')),
+    mainRFID: (context) => MainRfid(),
 
   
   };
