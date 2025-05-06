@@ -17,7 +17,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
-  final _zebra123Plugin = Zebra123();
+  final _zebra123Plugin = Zebra123(callback: null);
 
   @override
   void initState() {

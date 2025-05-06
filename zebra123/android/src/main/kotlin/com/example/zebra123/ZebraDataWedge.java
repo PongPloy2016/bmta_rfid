@@ -1,4 +1,4 @@
-package  com.example.bmta_rfid_app;
+package com.example.zebra123;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

@@ -1,4 +1,4 @@
-package  com.example.bmta_rfid_app;
+package com.example.zebra123;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,7 +24,8 @@ public interface ZebraDevice {
         scan,
         write,
         mode,
-        unknown
+        unknown,
+        startScan
     }
 
     enum Requests {

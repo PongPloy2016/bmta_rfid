@@ -1,4 +1,4 @@
-package  com.example.bmta_rfid_app;
+package com.example.zebra123;
 
 import android.content.Context;
 import android.util.Log;
@@ -31,8 +31,8 @@ public class Zebra123 implements FlutterPlugin, MethodCallHandler, StreamHandler
 
   private Context context;
 
-  private final String METHODCHANNEL = "com.example.bmta_rfid_appsfdsf/methoddsfdfd";
-  private final String EVENTCHANNEL = "com.example.bmta_rfid_appsfdsd/eventsdfdfd";
+  private final String METHODCHANNEL = "com.example.zebra123/method";
+  private final String EVENTCHANNEL = "com.example.zebra123/event";
 
   boolean supportsRfid = false;
   boolean supportsDatawedge = false;

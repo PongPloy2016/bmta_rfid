@@ -6,7 +6,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   MethodChannelZebra123 platform = MethodChannelZebra123();
-  const MethodChannel channel = MethodChannel('zebra123');
+  const MethodChannel channel = MethodChannel('com.example.zebra123/method');
 
   setUp(() {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(

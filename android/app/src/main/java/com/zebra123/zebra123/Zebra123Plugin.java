@@ -43,6 +43,6 @@ public class Zebra123Plugin implements FlutterPlugin, MethodCallHandler {
     private String startScan() {
         // ตรงนี้คุณสามารถเชื่อมกับ Zebra SDK จริงได้
         // สำหรับตัวอย่างเราจะ return ค่าจำลอง
-        return "FakeBarcode1234567890";
+        return "FakeBarcode1234567890XXXX";
     }
 }

@@ -765,11 +765,10 @@ packages:
   zebra123:
     dependency: "direct main"
     description:
-      name: zebra123
-      sha256: d9050e27088e4a7808e54ff5ed8d3e0929dabed46592f1a686584abff9b920d4
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.0.0"
+      path: zebra123
+      relative: true
+    source: path
+    version: "0.0.1"
 sdks:
-  dart: ">=3.7.0-0 <4.0.0"
+  dart: ">=3.7.2 <4.0.0"
   flutter: ">=3.24.0"

@@ -20,7 +20,7 @@ void main() {
   });
 
   test('getPlatformVersion', () async {
-    Zebra123 zebra123Plugin = Zebra123();
+    Zebra123 zebra123Plugin = Zebra123(callback: null);
     MockZebra123Platform fakePlatform = MockZebra123Platform();
     Zebra123Platform.instance = fakePlatform;
 
