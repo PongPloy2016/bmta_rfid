@@ -7,6 +7,7 @@ import 'package:bmta_rfid_app/srceens/login/login_screen.dart';
 import 'package:bmta_rfid_app/srceens/bottomnavpage/navigationBarScreen.dart';
 import 'package:bmta_rfid_app/srceens/mapingTagRfid/Mapping_tag_Rfid.dart';
 import 'package:bmta_rfid_app/srceens/propertyList/property_listing_screen.dart';
+import 'package:bmta_rfid_app/srceens/scanPage/scanPage.dart';
 import 'package:bmta_rfid_app/srceens/serachFindProperty/serach_find_property_screen.dart';
 import 'package:bmta_rfid_app/srceens/serachRFID/search_Rfid_screen.dart';
 import 'package:bmta_rfid_app/srceens/serachSupplies/serach_supplise_sreen.dart';
@@ -28,6 +29,7 @@ class AppRouter {
   static const String mappingTagRfid = 'mappingTagRfid';
   static const String searchRfid = 'searchRfid';
   static const String mainRFID = 'mainRFID';
+  static const String scanPage = 'scanPage';
 
 
   // Router Map
@@ -47,6 +49,7 @@ class AppRouter {
     searchRfid: (context) => SearchRfidScreen(),
     mappingTagRfid: (context) => MappingTagRfidScreen(data: MemoItem(memoCode: '', subject: '')),
     mainRFID: (context) => MainRfid(),
+    scanPage: (context) => ScanPage(),
 
   
   };

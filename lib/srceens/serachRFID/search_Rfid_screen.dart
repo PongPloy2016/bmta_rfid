@@ -1,10 +1,12 @@
 import 'package:bmta_rfid_app/app_router.dart';
+import 'package:bmta_rfid_app/utils/zebra/classes.dart';
+import 'package:bmta_rfid_app/utils/zebra/enums.dart';
+import 'package:bmta_rfid_app/utils/zebra/zebra123.dart';
 import 'package:bmta_rfid_app/widgets/appbar/custom_app_bar.dart';
 import 'package:bmta_rfid_app/widgets/textFrom/custom_text_form_field.dart';
 import 'package:bmta_rfid_app/widgets/widgets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:zebra123/zebra123.dart';
 
 
 enum Views { list, write }

@@ -2,6 +2,7 @@ import 'package:bmta_rfid_app/mainRfid.dart';
 import 'package:bmta_rfid_app/srceens/equipmentDetail/equipmentDetailScreen.dart';
 import 'package:bmta_rfid_app/srceens/equipmentList/equipmentListScreen.dart';
 import 'package:bmta_rfid_app/srceens/mainPage/main_screen.dart';
+import 'package:bmta_rfid_app/srceens/scanPage/scanPage.dart';
 import 'package:bmta_rfid_app/themes/colors.dart';
 import 'package:bmta_rfid_app/themes/fontsize.dart';
 import 'package:flutter/material.dart';
@@ -40,10 +41,10 @@ class _NavigationBarScreenState extends State<NavigationBarScreen>
         body: TabBarView(
           physics: const NeverScrollableScrollPhysics(),
           controller: _tabController,
-          children: const [
+          children:  [
             MainPageScreen(),
             MainRfid(),
-            EquipmentListScreen(),
+            ScanPage(),
             EquipmentDetailScreen(),
           
           ],
