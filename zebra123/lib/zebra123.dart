@@ -60,6 +60,14 @@ class Zebra123 {
     }
   }
 
+  Future  onTagRead(
+      {required Function(RfidTag tag) onTagRead,
+      required Function(List<RfidTag> tags) onTagsRead}) async {
+    if (_bridge.contains(this)) {
+      _bridge.onTagRead(onTagRead: onTagRead, onTagsRead: onTagsRead);
+    }
+  }
+
   // return true if bridge contains "this" (listener)
   bool get isListening => _bridge.contains(this);
 
@@ -118,6 +126,13 @@ class Zebra123 {
         passwordNew: passwordNew,
         data: data);
   }
+
+    Future startTest() async {
+    if (_bridge.contains(this)) {
+      _bridge.scan(Requests.start);
+    }
+  }
+
 
   // zebra event callback handler
   void callback(Interfaces interface, Events event, dynamic data) {

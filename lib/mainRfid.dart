@@ -33,8 +33,18 @@ class _MainRfidState extends State<MainRfid> {
   @override
   void initState() {
     zebra123 = Zebra123(callback: callback);
+
+  
+  
+
     super.initState();
   }
+
+  
+  void startTest() {
+    zebra123?.startReading();
+  }
+
 
   void startReading() {
     zebra123?.setMode(Modes.barcode);
@@ -56,6 +66,21 @@ class _MainRfidState extends State<MainRfid> {
       scanning = true;
       tracking = false;
     });
+
+    // สมัครฟังเหตุการณ์อ่าน RFID tag
+    // register the two callbacks
+    zebra123?.onTagRead(
+      onTagRead: (RfidTag tag) {
+        setState(() {
+          tags.add(tag);
+        });
+      },
+      onTagsRead: (List<RfidTag> batch) {
+        setState(() {
+          tags.addAll(batch);
+        });
+      },
+    );
   }
 
   void stopScanning() {
@@ -138,6 +163,26 @@ class _MainRfidState extends State<MainRfid> {
           padding: const EdgeInsets.only(left: 5, right: 5),
           child: SizedBox(width: 75, height: 50, child: readBtn));
     }
+
+
+    Widget testBtn = const Offstage();
+    if (zebra123?.connectionStatus == Status.connected &&
+        !scanning &&
+        !tracking) {
+      readBtn = FloatingActionButton(
+          backgroundColor: Colors.lightGreenAccent,
+           onPressed: () => startReading(),
+          child: const Text("Test",
+              style: TextStyle(color: Colors.black, fontSize: 16)));
+      readBtn = Padding(
+          padding: const EdgeInsets.only(left: 5, right: 5),
+          child: SizedBox(width: 75, height: 50, child: readBtn));
+    }
+
+
+  
+
+   
 
     Widget stopBtn = const Offstage();
     if (scanning || tracking) {

@@ -7,7 +7,7 @@ import 'zebra123_platform_interface.dart';
 class MethodChannelZebra123 extends Zebra123Platform {
   /// The method channel used to interact with the native platform.
   @visibleForTesting
-  final methodChannel = const MethodChannel('com.example.zebra123/method');
+  final methodChannel = const MethodChannel('method');
 
   @override
   Future<String?> getPlatformVersion() async {

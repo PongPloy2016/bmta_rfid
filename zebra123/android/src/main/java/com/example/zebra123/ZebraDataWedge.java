@@ -19,6 +19,10 @@ import java.util.HashMap;
 import io.flutter.plugin.common.EventChannel.StreamHandler;
 import io.flutter.plugin.common.EventChannel.EventSink;
 
+import com.example.zebra123.Zebra123Plugin;
+import com.example.zebra123.ZebraDevice;
+
+
 public class ZebraDataWedge extends BroadcastReceiver implements ZebraDevice {
 
     private static final Interfaces INTERFACE = Interfaces.datawedge;
@@ -46,7 +50,7 @@ public class ZebraDataWedge extends BroadcastReceiver implements ZebraDevice {
             return true;
         }
         catch(Exception e) {
-            Log.d(Zebra123.getTagName(context), "Reader does not support Data Wedge");
+            Log.d(Zebra123Plugin.getTagName(context), "Reader does not support Data Wedge");
         }
         return false;
     }
@@ -54,7 +58,7 @@ public class ZebraDataWedge extends BroadcastReceiver implements ZebraDevice {
     @Override
     public void onReceive(Context context, Intent intent) {
         String actionSource = intent.getAction();
-        String actionTarget = Zebra123.getActionName(context);
+        String actionTarget = Zebra123Plugin.getActionName(context);
         if (actionSource.equals(actionTarget)) {
             try {
                 String barcode = intent.getStringExtra("com.symbol.datawedge.data_string");
@@ -70,19 +74,19 @@ public class ZebraDataWedge extends BroadcastReceiver implements ZebraDevice {
 
                 // duplicate reads within 1 second are ignored
                 if (barcode.equals(barcodeLast) && Math.abs(seen - seenLast) < 1000) {
-                    Log.e(Zebra123.getTagName(context), "Duplicate barcode read within 1 second. Skipping.");
+                    Log.e(Zebra123Plugin.getTagName(context), "Duplicate barcode read within 1 second. Skipping.");
                     return;
                 }
                 barcodeLast = barcode;
                 seenLast = seen;
 
                 // notify listener
-                Log.d(Zebra123.getTagName(context), Events.readBarcode + ": " + tag);
+                Log.d(Zebra123Plugin.getTagName(context), Events.readBarcode + ": " + tag);
 
                 sendEvent(Events.readBarcode, tag);
             }
             catch(Exception e) {
-                Log.e(Zebra123.getTagName(context), "Error deserializing json object" + e.getMessage());
+                Log.e(Zebra123Plugin.getTagName(context), "Error deserializing json object" + e.getMessage());
                 sendEvent(Events.error, ZebraDevice.toError("onReceive()", e));
             }
         }
@@ -99,7 +103,7 @@ public class ZebraDataWedge extends BroadcastReceiver implements ZebraDevice {
         }
         catch (Exception e)
         {
-            Log.e(Zebra123.getTagName(context), "Error sending command to device" + e.getMessage());
+            Log.e(Zebra123Plugin.getTagName(context), "Error sending command to device" + e.getMessage());
         }
     }
 
@@ -114,7 +118,7 @@ public class ZebraDataWedge extends BroadcastReceiver implements ZebraDevice {
         }
         catch (Exception e)
         {
-            Log.e(Zebra123.getTagName(context), "Error sending command to device" + e.getMessage());
+            Log.e(Zebra123Plugin.getTagName(context), "Error sending command to device" + e.getMessage());
         }
     }
 
@@ -126,7 +130,7 @@ public class ZebraDataWedge extends BroadcastReceiver implements ZebraDevice {
             //filter.addAction("com.symbol.datawedge.api.RESULT_ACTION");
             //filter.addAction("com.symbol.datawedge.api.ACTION");
             //filter.addAction("com.symbol.datawedge.api.NOTIFICATION_ACTION");
-            filter.addAction(Zebra123.getActionName(context));
+            filter.addAction(Zebra123Plugin.getActionName(context));
             filter.addCategory(Intent.CATEGORY_DEFAULT);
 
             context.registerReceiver(this, filter);
@@ -139,7 +143,7 @@ public class ZebraDataWedge extends BroadcastReceiver implements ZebraDevice {
         }
         catch(Exception e) {
 
-            Log.e(Zebra123.getTagName(context), "Error connecting to device" + e.getMessage());
+            Log.e(Zebra123Plugin.getTagName(context), "Error connecting to device" + e.getMessage());
             sendEvent(Events.error, ZebraDevice.toError("connect()", e));
         }
     }
@@ -157,7 +161,7 @@ public class ZebraDataWedge extends BroadcastReceiver implements ZebraDevice {
             sendEvent(Events.connectionStatus,map);
         }
         catch(Exception e) {
-            Log.e(Zebra123.getTagName(context), "Error disconnecting from device" + e.getMessage());
+            Log.e(Zebra123Plugin.getTagName(context), "Error disconnecting from device" + e.getMessage());
             sendEvent(Events.error, ZebraDevice.toError("disconnect()", e));
         }
     }
@@ -169,7 +173,7 @@ public class ZebraDataWedge extends BroadcastReceiver implements ZebraDevice {
         }
         catch(Exception e)
         {
-            Log.e(Zebra123.getTagName(context), "Error during dispose()." + e.getMessage());
+            Log.e(Zebra123Plugin.getTagName(context), "Error during dispose()." + e.getMessage());
         }
     }
 
@@ -182,21 +186,21 @@ public class ZebraDataWedge extends BroadcastReceiver implements ZebraDevice {
 
     @Override
     public void setMode(Modes mode) {
-        Exception exception = new Exception("Not implemented");
+        Exception exception = new Exception("setMode Not implemented");
         sendEvent(Events.error, ZebraDevice.toError("Error calling mode()", exception));
         return;
     }
 
     @Override
     public void track(Requests request, ArrayList<String> tags) {
-        Exception exception = new Exception("Not implemented");
+        Exception exception = new Exception("track Not implemented");
         sendEvent(Events.error, ZebraDevice.toError("Error calling track()", exception));
         return;
     }
 
     @Override
     public void write(String epc, String newEpc, String password, String newPassword, String data) {
-        Exception exception = new Exception("Not implemented");
+        Exception exception = new Exception("write Not implemented");
         sendEvent(Events.error, ZebraDevice.toError("Error calling write()", exception));
         return;
     }
@@ -211,11 +215,11 @@ public class ZebraDataWedge extends BroadcastReceiver implements ZebraDevice {
 
         try {
 
-            String packageName = Zebra123.getPackageName(context);
-            String profileName = Zebra123.getProfileName(context);
-            String actionName  = Zebra123.getActionName(context);
+            String packageName = Zebra123Plugin.getPackageName(context);
+            String profileName = Zebra123Plugin.getProfileName(context);
+            String actionName  = Zebra123Plugin.getActionName(context);
 
-            Log.i(Zebra123.getTagName(context), "Creating Datawedge profile " + profileName + " for package " + packageName + " with Intent action " + actionName);
+            Log.i(Zebra123Plugin.getTagName(context), "Creating Datawedge profile " + profileName + " for package " + packageName + " with Intent action " + actionName);
 
             // create the profile if it doesnt exist
             send(context, "com.symbol.datawedge.api.CREATE_PROFILE", packageName);
@@ -288,14 +292,14 @@ public class ZebraDataWedge extends BroadcastReceiver implements ZebraDevice {
             //sendCommandString("com.symbol.datawedge.api.SCANNER_INPUT_PLUGIN", "ENABLE_PLUGIN", false);
         }
         catch (Exception e) {
-            Log.e(Zebra123.getTagName(context), "Error creating profile" + e.getMessage());
+            Log.e(Zebra123Plugin.getTagName(context), "Error creating profile" + e.getMessage());
         }
     }
 
     private void sendEvent(final ZebraDevice.Events event, final HashMap map) {
 
         if (sink == null) {
-            Log.e(Zebra123.getTagName(context), "Can't send notification to flutter. Sink is null");
+            Log.e(Zebra123Plugin.getTagName(context), "Can't send notification to flutter. Sink is null");
             return;
         }
 
@@ -307,7 +311,7 @@ public class ZebraDataWedge extends BroadcastReceiver implements ZebraDevice {
         }
         catch (Exception e)
         {
-            Log.e(Zebra123.getTagName(context), "Error sending notification to flutter. Error: " + e.getMessage());
+            Log.e(Zebra123Plugin.getTagName(context), "Error sending notification to flutter. Error: " + e.getMessage());
         }
     }
 }

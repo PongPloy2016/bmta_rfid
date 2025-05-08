@@ -38,10 +38,10 @@ class Bridge {
 
   Bridge._() {
     // create method channel
-    _methodChannel = const MethodChannel("com.example.zebra123/method");
+    _methodChannel = const MethodChannel("methodX");
 
     // create event channel
-    _eventChannel = const EventChannel("com.example.zebra123/event");
+    _eventChannel = const EventChannel("eventX");
 
     // listen for events
     _eventChannel.receiveBroadcastStream().listen(_eventListener);
@@ -54,6 +54,32 @@ class Bridge {
   void addListener(Zebra123 listener) {
     if (!contains(listener)) {
       _listeners.add(listener);
+    }
+  }
+
+  void onTagRead(
+      {required Function(RfidTag tag) onTagRead,
+      required Function(List<RfidTag> tags) onTagsRead}) {
+    if (contains(_listeners.first)) {
+      _listeners.add(Zebra123(callback: (interface, event, data) {
+        if (event == Events.error) {
+       //   if (data is List<RfidTag>) {
+
+            var tags =  [
+      RfidTag(epc: 'EPC2', antenna: 2, rssi: -60, distance: 12,
+              memoryBankData: 'D2', lockData: 'L2', size: 64,
+              seen: 'now', interface: Interfaces.unknown),
+      RfidTag(epc: 'EPC3', antenna: 1, rssi: -55, distance: 11,
+              memoryBankData: 'D3', lockData: 'L3', size: 32,
+              seen: 'now', interface: Interfaces.unknown),
+    ];
+      onTagsRead.call(tags);
+          } else if (data is RfidTag) {
+            onTagRead(data);
+          }
+        }
+    //  }
+      ));
     }
   }
 

@@ -1,5 +1,8 @@
 package com.example.zebra123;
 
+import com.example.zebra123.ZebraRfid;
+import com.example.zebra123.ZebraDataWedge;
+
 import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
@@ -19,8 +22,9 @@ import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 
+
 /** Zebra123 */
-public class Zebra123 implements FlutterPlugin, MethodCallHandler, StreamHandler {
+public class Zebra123Plugin implements FlutterPlugin, MethodCallHandler, StreamHandler {
 
   private static final ZebraDevice.Interfaces INTERFACE = ZebraDevice.Interfaces.unknown;
 
@@ -31,8 +35,8 @@ public class Zebra123 implements FlutterPlugin, MethodCallHandler, StreamHandler
 
   private Context context;
 
-  private final String METHODCHANNEL = "com.example.zebra123/method";
-  private final String EVENTCHANNEL = "com.example.zebra123/event";
+  private final String METHODCHANNEL = "methodX";
+  private final String EVENTCHANNEL = "eventX";
 
   boolean supportsRfid = false;
   boolean supportsDatawedge = false;
@@ -65,7 +69,7 @@ public class Zebra123 implements FlutterPlugin, MethodCallHandler, StreamHandler
 
     context = flutterPluginBinding.getApplicationContext();
 
-    //if (methodHandler != null) methodHandler.setMethodCallHandler(null);
+    if (methodHandler != null) methodHandler.setMethodCallHandler(null);
     methodHandler = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), METHODCHANNEL);
     methodHandler.setMethodCallHandler(this);
 
@@ -111,8 +115,13 @@ public class Zebra123 implements FlutterPlugin, MethodCallHandler, StreamHandler
           ZebraDevice.Requests request = ZebraDevice.Requests.unknown;
           try {
             request = ZebraDevice.Requests.valueOf(argument(call,"request"));
+           Log.e(getTagName(context), "request: " + request.toString());
+            String tags = argument(call,"tags");
+            Log.e(getTagName(context), "tags: " + tags);  
           }
-          catch(Exception e) {}
+          catch(Exception e) {
+             Log.e(getTagName(context), "Error Scan  parsing request: " + e.getMessage());
+          }
           device.scan(request);
         }
         break;
@@ -187,30 +196,47 @@ public class Zebra123 implements FlutterPlugin, MethodCallHandler, StreamHandler
       if (device != null) device.disconnect();
       device = null;
 
-      // device supports rfid?
+     // device supports rfid?
       if (supportsRfid) {
         device = new ZebraRfid(context, sink);
         device.connect();
+
+         Log.e(getTagName(context), " connecting to device ZebraRfid ");
+
+         
+Toast.makeText(context, "connecting to device ZebraRfid", Toast.LENGTH_LONG).show();
       }
 
-      // datawedge supported?
+      //datawedge supported?
       else if (supportsDatawedge) {
         device = new ZebraDataWedge(context, sink);
         device.connect();
+
+Log.e(getTagName(context), "connecting to device ZebraDataWedge"+ device.toString());
+
+Toast.makeText(context, "connecting to device ZebraDataWedge", Toast.LENGTH_LONG).show();
+
+
       }
 
-      // no supported device
+    //  no supported device
       else {
         HashMap<String, Object> map =new HashMap<>();
         map.put("status", ZebraDevice.ZebraConnectionStatus.error.toString());
 
         // notify device
         sendEvent(sink, ZebraDevice.Events.connectionStatus,map);
+
+        Log.e(getTagName(context), "Status: " + ZebraDevice.ZebraConnectionStatus.error.toString());
+Toast.makeText(context, "notify device", Toast.LENGTH_LONG).show();
+
       }
     }
     catch(Exception e) {
         Log.e(getTagName(context), "Error connecting to device" + e.getMessage());
         sendEvent(sink, ZebraDevice.Events.error, ZebraDevice.toError("Error during connect()", e));
+
+        Toast.makeText(context, "Error connecting to device"+ e.getMessage(), Toast.LENGTH_LONG).show();
     }
   }
 
