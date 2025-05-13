@@ -1,9 +1,10 @@
+import 'package:bmta_rfid_app/app_router.dart';
 import 'package:bmta_rfid_app/widgets/appbar/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:bmta_rfid_app/models/propertyItemModel/property_Item_model.dart';
-import 'package:bmta_rfid_app/widgets/propertyItemWidgets/propertyItemWidgets.dart';
+import 'package:bmta_rfid_app/widgets/propertysetItemWidgets/property_set_Item_widgets.dart';
 
-class PropertyListingScreen extends StatelessWidget {
+class PropertySetListListingScreen extends StatelessWidget {
   final List<PropertyItemModel> items = [
     PropertyItemModel(
       title: 'โต๊ะคอมพิวเตอร์',
@@ -57,7 +58,7 @@ class PropertyListingScreen extends StatelessWidget {
  
   ];
 
-  PropertyListingScreen({super.key});
+  PropertySetListListingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -86,9 +87,12 @@ class PropertyListingScreen extends StatelessWidget {
               itemCount: items.length,
               itemBuilder: (context, index) {
                 final item = items[index];
-                return PropertyItemWidgets(
+                return PropertySetItemWidgets(
                   item: item,
-                  onlickTap: () {},
+                  onlickTap: () {
+                    print("onclick");
+                     Navigator.pushNamed(context, AppRouter.propertyListRegistrationDetails);
+                  },
                 );
               },
             ),

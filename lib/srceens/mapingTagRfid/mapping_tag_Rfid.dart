@@ -127,7 +127,7 @@ class _MappingTagRfidScreenState extends State<MappingTagRfidScreen> {
                     //if (_formKey.currentState?.validate() ?? false) {
                     // Do the search action
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('กำลังค้นหา...')));
-                    Navigator.pushNamed(context, AppRouter.propertyList);
+                    Navigator.pushNamed(context, AppRouter.propertySetListListing);
                     // }
                   },
                   style: ElevatedButton.styleFrom(

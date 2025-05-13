@@ -6,7 +6,8 @@ import 'package:bmta_rfid_app/srceens/equipmentList/equipmentListScreen.dart';
 import 'package:bmta_rfid_app/srceens/login/login_screen.dart';
 import 'package:bmta_rfid_app/srceens/bottomnavpage/navigationBarScreen.dart';
 import 'package:bmta_rfid_app/srceens/mapingTagRfid/Mapping_tag_Rfid.dart';
-import 'package:bmta_rfid_app/srceens/propertyList/property_listing_screen.dart';
+import 'package:bmta_rfid_app/srceens/propertyListRegistrationDetails/property_list_registration_details_screen.dart';
+import 'package:bmta_rfid_app/srceens/propertySetList/property_set_listing_screen.dart';
 import 'package:bmta_rfid_app/srceens/scanPage/scanPage.dart';
 import 'package:bmta_rfid_app/srceens/serachFindProperty/serach_find_property_screen.dart';
 import 'package:bmta_rfid_app/srceens/serachRFID/search_Rfid_screen.dart';
@@ -25,7 +26,8 @@ class AppRouter {
   static const String equipmentDetail = 'equipmentDetail';
   static const String serachFindProperty = 'serachFindProperty';
   static const String serachSupplise = 'serachSupplise';
-  static const String propertyList = 'propertyList';
+  static const String propertySetListListing = 'propertySetListListing';
+  static const String propertyListRegistrationDetails = 'propertyListRegistrationDetails';
   static const String mappingTagRfid = 'mappingTagRfid';
   static const String searchRfid = 'searchRfid';
   static const String mainRFID = 'mainRFID';
@@ -45,7 +47,8 @@ class AppRouter {
     equipmentDetail: (context) => EquipmentDetailScreen(),
     serachFindProperty: (context) => SerachFindPropertyScreen(),
     serachSupplise: (context) => SerachSuppliseSreen(),
-    propertyList: (context) => PropertyListingScreen(),
+    propertySetListListing: (context) => PropertySetListListingScreen(),
+    propertyListRegistrationDetails: (context) => PropertyListRegistrationDetailsScreen(),
     searchRfid: (context) => SearchRfidScreen(),
     mappingTagRfid: (context) => MappingTagRfidScreen(data: MemoItem(memoCode: '', subject: '')),
     mainRFID: (context) => MainRfid(),

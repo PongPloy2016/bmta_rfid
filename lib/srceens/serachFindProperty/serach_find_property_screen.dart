@@ -75,6 +75,17 @@ class SerachFindPropertyScreenState extends ConsumerState<SerachFindPropertyScre
   void initState() {
     super.initState();
 
+    dropDownFloorList.add(DropDownValueModel(name: "ชั้น 1", value: 1));
+    dropDownFloorList.add(DropDownValueModel(name: "ชั้น 2", value: 2));
+    dropDownFloorList.add(DropDownValueModel(name: "ชั้น 3", value: 3));
+
+    dropDownRoomList.add(DropDownValueModel(name: "ห้อง 100", value: 1));
+    dropDownRoomList.add(DropDownValueModel(name: "ห้อง 101", value: 1));
+    dropDownRoomList.add(DropDownValueModel(name: "ห้อง 102", value: 1));
+    dropDownRoomList.add(DropDownValueModel(name: "ห้อง 103", value: 1));
+
+
+
     // เรียก API + ตั้ง listener เมื่อ widget สร้างเสร็จ
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(branchControllerProvider.notifier).fetchBranches();
@@ -176,9 +187,7 @@ class SerachFindPropertyScreenState extends ConsumerState<SerachFindPropertyScre
                               onChanged: (value) {
                                 setState(() {
                                   branchSelect = value?.toString();
-                                  buildingSelect = null;
-                                  floorSelect = null;
-                                  roomSelect = null;
+                           
                                 });
                               },
                               validator: (value) {
@@ -202,8 +211,7 @@ class SerachFindPropertyScreenState extends ConsumerState<SerachFindPropertyScre
                               onChanged: (value) {
                                 setState(() {
                                   buildingSelect = value?.toString();
-                                  floorSelect = null;
-                                  roomSelect = null;
+                             
                                 });
                               },
                               validator: (value) {
@@ -227,7 +235,7 @@ class SerachFindPropertyScreenState extends ConsumerState<SerachFindPropertyScre
                               onChanged: (value) {
                                 setState(() {
                                   floorSelect = value?.toString();
-                                  roomSelect = null;
+                               
                                 });
                               },
                               validator: (value) {
@@ -275,7 +283,7 @@ class SerachFindPropertyScreenState extends ConsumerState<SerachFindPropertyScre
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(content: Text('กำลังค้นหา...')),
                                     );
-                                    Navigator.pushNamed(context, AppRouter.propertyList);
+                                    Navigator.pushNamed(context, AppRouter.propertySetListListing);
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(

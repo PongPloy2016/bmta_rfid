@@ -153,7 +153,7 @@ class CustomOutlinedButton extends StatelessWidget {
 Tuple2<Color, Color> getColors(String? type) {
   switch (type) {
     case 'primary':
-      return const Tuple2(Color(primaryColor), Colors.white);
+      return const Tuple2(Color.fromARGB(255, 47, 145, 104), Colors.white);
     case 'secondary':
       return const Tuple2(Color(blackColor), Colors.white);
     case 'success':
