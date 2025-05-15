@@ -65,14 +65,64 @@ class Bridge {
         if (event == Events.error) {
        //   if (data is List<RfidTag>) {
 
-            var tags =  [
-      RfidTag(epc: 'EPC2', antenna: 2, rssi: -60, distance: 12,
-              memoryBankData: 'D2', lockData: 'L2', size: 64,
-              seen: 'now', interface: Interfaces.unknown),
-      RfidTag(epc: 'EPC3', antenna: 1, rssi: -55, distance: 11,
-              memoryBankData: 'D3', lockData: 'L3', size: 32,
-              seen: 'now', interface: Interfaces.unknown),
-    ];
+            var tags =   [
+    RfidTag(
+      epc: "E2000017221101441890AAAA",
+      antenna: 1,
+      rssi: -42,
+      distance: 100,
+      memoryBankData: "MBData_A",
+      lockData: "UNLOCKED",
+      size: 64,
+      seen: "2025-05-14 10:00:00",
+      interface: Interfaces.rfidapi3,
+    ),
+    RfidTag(
+      epc: "E2000017221101441890BBBB",
+      antenna: 2,
+      rssi: -50,
+      distance: 150,
+      memoryBankData: "MBData_B",
+      lockData: "LOCKED",
+      size: 128,
+      seen: "2025-05-14 10:05:00",
+      interface: Interfaces.datawedge,
+    ),
+    RfidTag(
+      epc: "E2000017221101441890CCCC",
+      antenna: 3,
+      rssi: -35,
+      distance: 90,
+      memoryBankData: "MBData_C",
+      lockData: "UNLOCKED",
+      size: 32,
+      seen: "2025-05-14 10:10:00",
+      interface: Interfaces.unknown,
+    ),
+    RfidTag(
+      epc: "E2000017221101441890DDDD",
+      antenna: 4,
+      rssi: -60,
+      distance: 200,
+      memoryBankData: "MBData_D",
+      lockData: "LOCKED",
+      size: 256,
+      seen: "2025-05-14 10:15:00",
+      interface: Interfaces.unknown,
+    ),
+    RfidTag(
+      epc: "E2000017221101441890EEEE",
+      antenna: 5,
+      rssi: -70,
+      distance: 250,
+      memoryBankData: "MBData_E",
+      lockData: "UNLOCKED",
+      size: 512,
+      seen: "2025-05-14 10:20:00",
+      interface: Interfaces.unknown,
+    ),
+
+  ];
       onTagsRead.call(tags);
           } else if (data is RfidTag) {
             onTagRead(data);

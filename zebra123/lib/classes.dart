@@ -72,6 +72,22 @@ class RfidTag {
   }
 }
 
+
+/***
+ * | Field            | ความหมาย                                                           | ประเภทข้อมูล        |
+| ---------------- | ------------------------------------------------------------------ | ------------------- |
+| `epc`            | รหัส EPC ของแท็ก RFID (รหัสเฉพาะของแท็ก)                           | `String`            |
+| `antenna`        | หมายเลขเสาอากาศที่อ่านแท็กนี้                                      | `int`               |
+| `rssi`           | ค่าความแรงของสัญญาณ (Received Signal Strength Indicator)           | `int`               |
+| `distance`       | ระยะห่างโดยประมาณจากเครื่องอ่าน (มักจะคำนวณจาก RSSI)               | `int`               |
+| `memoryBankData` | ข้อมูลจาก memory bank ของแท็ก                                      | `String`            |
+| `lockData`       | ข้อมูลการล็อก (เช่นว่าแท็กนี้ถูกล็อกหรือไม่)                       | `String`            |
+| `size`           | ขนาดข้อมูลที่อ่านได้จากแท็ก (หน่วยเป็น byte)                       | `int`               |
+| `seen`           | ข้อมูลเวลา หรือ จำนวนครั้งที่เห็นแท็กนี้ (แล้วแต่การออกแบบ)        | `String`            |
+| `interface`      | ชนิดของอินเตอร์เฟส/แหล่งที่มาของการอ่าน (อิงจาก enum `Interfaces`) | `Interfaces` (enum) |
+
+ */
+
 /// connection status class holds the device connection state
 class ConnectionStatus {
   Status status = Status.unknown;

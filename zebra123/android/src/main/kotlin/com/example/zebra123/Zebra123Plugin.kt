@@ -123,6 +123,8 @@ class Zebra123Plugin : FlutterPlugin, MethodCallHandler, StreamHandler {
         }
         sendEvent(sink, ZebraDevice.Events.support, map)
 
+        Log.e(getTagName(context), "onListen: ${supportsDatawedge}")
+
         connect(sink)
     }
 

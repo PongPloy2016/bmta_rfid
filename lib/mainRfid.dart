@@ -34,9 +34,19 @@ class _MainRfidState extends State<MainRfid> {
   void initState() {
     zebra123 = Zebra123(callback: callback);
 
-  
-  
-
+    
+    zebra123?.onTagRead(
+      onTagRead: (RfidTag tag) {
+        setState(() {
+          tags.add(tag);
+        });
+      },
+      onTagsRead: (List<RfidTag> batch) {
+        setState(() {
+          tags.addAll(batch);
+        });
+      },
+    );
     super.initState();
   }
 
