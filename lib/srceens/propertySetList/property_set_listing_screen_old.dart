@@ -1,12 +1,10 @@
 import 'package:bmta_rfid_app/app_router.dart';
 import 'package:bmta_rfid_app/widgets/appbar/custom_app_bar.dart';
-import 'package:bmta_rfid_app/widgets/button/buttons.dart';
-import 'package:bmta_rfid_app/widgets/propertydetailItemWidgets/property_detail_Item_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:bmta_rfid_app/models/propertyItemModel/property_Item_model.dart';
 import 'package:bmta_rfid_app/widgets/propertysetItemWidgets/property_set_Item_widgets.dart';
 
-class PropertyListRegistrationDetailsScreen extends StatelessWidget {
+class PropertySetListListingScreen extends StatelessWidget {
   final List<PropertyItemModel> items = [
     PropertyItemModel(
       title: 'โต๊ะคอมพิวเตอร์',
@@ -57,19 +55,21 @@ class PropertyListRegistrationDetailsScreen extends StatelessWidget {
       location: 'สำนักงาน B',
       count: 18,
     ),
+ 
   ];
 
-  PropertyListRegistrationDetailsScreen({super.key});
+  PropertySetListListingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        title: "รายละเอียดทะเบียนทรัพย์สิน" ?? '',
-        onSuccess: () {
-          Navigator.pop(context);
-        },
-      ),
+      appBar: 
+      CustomAppBar(
+                title:"รายการทรัพย์สิน" ?? '',
+                onSuccess: () {
+                  Navigator.pop(context);
+                },
+              ),
       // AppBar(
       //   title: Center(child: Text('รายการทรัพย์สิน', style: TextStyle(fontSize: 20))),
       //   leading: IconButton(
@@ -87,46 +87,63 @@ class PropertyListRegistrationDetailsScreen extends StatelessWidget {
               itemCount: items.length,
               itemBuilder: (context, index) {
                 final item = items[index];
-                return PropertyDetailItemWidgets(
+                return PropertySetItemWidgets(
                   item: item,
-                  onlickTap: () {},
+                  onlickTap: () {
+                    print("onclick");
+                     Navigator.pushNamed(context, AppRouter.propertyListRegistrationDetails);
+                  },
                 );
               },
             ),
           ),
           // Bottom card with total number of items
-          const SizedBox(height: 10), // Add spacing after the bottom card
-          Padding(
-            padding:  const EdgeInsets.only(left: 20, right: 20),
-            child: Container(
-             margin: const EdgeInsets.only(bottom: 20),
-              child: SizedBox(
-                width: double.infinity,
-                height: 70,
-                child: CustomElevatedButton(
-                  type: 'success',
-                  text: "ส่งรายการ",
-                  size: "",
-                  onPressed: () {
-                    Navigator.pushNamed(context, AppRouter.propertyListRegistrationDetails);
-                  },
-                ),
-              ),
+                    const SizedBox(height: 10), // Add spacing after the bottom card
+
+       Card(
+  color: Colors.green,
+  margin: const EdgeInsets.all(10),
+  elevation: 2,
+  shape: const RoundedRectangleBorder(
+    borderRadius: BorderRadius.only(
+      topLeft: Radius.circular(20),
+      topRight: Radius.circular(20),
+    ),
+  ),
+  child: Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          const Text(
+            "รายการทรัพย์สินที่พบ",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 26,
+              fontWeight: FontWeight.bold,
             ),
+            textAlign: TextAlign.center,
           ),
-          // CustomElevatedButton(
-          //  type: 'success',
-          //   text: "บันทึก",
-          //   size: "",
-          //   onPressed: () {
-          //     Navigator.pushNamed(context, AppRouter.propertyListRegistrationDetails);
-          //   },
-          // ),
-          const SizedBox(height: 10), // Add spacing after the bottom card
+          Text(
+            "จำนวน ${items.length} รายการ",
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 26,
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    ),
+  ),
+),
 
           const SizedBox(height: 10), // Add spacing after the bottom card
         ],
       ),
     );
-  }  
+  }
 }
