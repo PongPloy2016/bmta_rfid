@@ -28,5 +28,5 @@ ThemeData customTheme = ThemeData(
     labelMedium: TextStyle(color: Color(textColor)),
     labelSmall: TextStyle(color: Color(textColor)),
   ),
-  fontFamily: fontFamily,
+  fontFamily: 'Kanit',
 );

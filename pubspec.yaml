@@ -52,3 +52,11 @@ flutter:
   - lib/assets/icons/
   - lib/assets/images/
   - lib/assets/fonts/
+
+  fonts:
+    - family: THSarabunNew
+      fonts:
+        - asset: lib/assets/fonts/THSarabunNew.ttf
+    - family: Kanit
+      fonts:
+        - asset: lib/assets/fonts/Kanit/Kanit-Regular.ttf

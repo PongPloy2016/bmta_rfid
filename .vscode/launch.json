@@ -27,8 +27,31 @@
             "type": "dart",
             "flutterMode": "debug",
             "toolArgs": [
+              "fvm",
               "flutter"
-            ],
+            ]
         },
+        {
+            "name": "Run on Web Emulator (via fvm)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "debug",
+            "toolArgs": [
+              "flutter"
+            ]
+        },
+        {
+            "name": "Run on Emulator (via fvm)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "debug",
+            "toolArgs": [
+                "fvm",
+                "flutter",
+                "run",
+                "-d",
+                "emulator-5554"
+            ]
+        }
     ]
 }

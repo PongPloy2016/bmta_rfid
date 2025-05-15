@@ -58,7 +58,7 @@ class _MyAppState extends State<MyApp> {
         final isTablet = constraints.maxWidth >= 600;
 
         return ScreenUtilInit(
-          designSize: isTablet ? const Size(600, 800) : const Size(375, 812),
+          designSize: isTablet ? const Size(480, 854) : const Size(480, 854),
           minTextAdapt: true,
           builder: (context, child) {
             double textScaleFactor = MediaQuery.of(context).textScaleFactor;
