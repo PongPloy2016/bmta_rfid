@@ -46,7 +46,7 @@ class _NavigationBarScreenState extends State<NavigationBarScreen>
             MainRfid(),
             ScanPage(),
             EquipmentDetailScreen(),
-          
+             EquipmentDetailScreen(),
           ],
         ),
       

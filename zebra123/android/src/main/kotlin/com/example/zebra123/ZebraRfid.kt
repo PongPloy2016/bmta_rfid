@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.widget.Toast
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -40,6 +41,11 @@ private fun configureReader() {
 
             setEvents()
             setMode(mode)
+
+            Log.e(Zebra123Plugin.getTagName(context), "kotlin configureReader  Setting mode to $mode")
+
+
+
             setTriggers(
                 START_TRIGGER_TYPE.START_TRIGGER_TYPE_IMMEDIATE,
                 STOP_TRIGGER_TYPE.STOP_TRIGGER_TYPE_IMMEDIATE
@@ -789,6 +795,11 @@ private fun configureReader() {
         readers.GetAvailableRFIDReaderList().size > 0
     } catch (e: Exception) {
         Log.d(Zebra123Plugin.getTagName(context), "Reader does not support RFID")
+        Toast.makeText(
+            context,
+            "Reader does not support RFID",
+            Toast.LENGTH_LONG
+        ).show()    
         false
     }
 }

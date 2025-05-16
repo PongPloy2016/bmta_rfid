@@ -111,6 +111,8 @@ class Zebra123 {
   Future setMode(Modes mode) async {
     if (_bridge.contains(this)) {
       _bridge.setMode(mode);
+
+      print("Zebra123: set mode to $mode");
     }
   }
 

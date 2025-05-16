@@ -128,6 +128,12 @@ class ZebraDataWedge(private val context: Context, sink: EventSink?) :
 
     override fun scan(request: ZebraDevice.Requests?) {
         // set the scanner to start or stop scanning
+
+         Log.e(
+                Zebra123Plugin.getTagName(context),
+                "scan"
+            )
+
         send(
             context,
             "com.symbol.datawedge.api.SOFT_SCAN_TRIGGER",
@@ -136,7 +142,7 @@ class ZebraDataWedge(private val context: Context, sink: EventSink?) :
     }
 
     override fun setMode(mode: ZebraDevice.Modes?) {
-        val exception = Exception("setMode Not implemented")
+        val exception = Exception("setMode Not implemented XXXX ")
         sendEvent(ZebraDevice.Events.error, ZebraDevice.toError("Error calling mode()", exception))
     }
 

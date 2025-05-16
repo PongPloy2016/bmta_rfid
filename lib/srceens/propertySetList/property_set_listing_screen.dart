@@ -16,58 +16,6 @@ class PropertySetListListingScreen extends StatefulWidget {
 }
 
 class _PropertySetListListingScreenState extends State<PropertySetListListingScreen> {
-  final List<PropertyItemModel> items = [
-    PropertyItemModel(
-      title: 'โต๊ะคอมพิวเตอร์',
-      category: 'หมวดฟอร์นิเจอร์ : ครุภัณฑ์สำนักงาน',
-      description: 'รายละเอียดฟอร์นิเจอร์ : โต๊ะคอมพิวเตอร์',
-      location: 'สำนักงาน B',
-      count: 5,
-    ),
-    PropertyItemModel(
-      title: 'จอ LCD รุ่น AOC',
-      category: 'หมวดฟอร์นิเจอร์ : ครุภัณฑ์สำนักงาน',
-      description: 'รายละเอียดฟอร์นิเจอร์ : จอ LCD',
-      location: 'สำนักงาน B',
-      count: 20,
-    ),
-    PropertyItemModel(
-      title: 'คอมพิวเตอร์ตั้งโต๊ะ',
-      category: 'หมวดฟอร์นิเจอร์ : ครุภัณฑ์สำนักงาน',
-      description: 'รายละเอียดฟอร์นิเจอร์ : คอมพิวเตอร์',
-      location: 'สำนักงาน B',
-      count: 18,
-    ),
-    PropertyItemModel(
-      title: 'เก้าอี้สำนักงาน',
-      category: 'หมวดฟอร์นิเจอร์ : ครุภัณฑ์สำนักงาน',
-      description: 'รายละเอียดฟอร์นิเจอร์ : เก้าอี้สำนักงาน',
-      location: 'สำนักงาน B',
-      count: 129,
-    ),
-    PropertyItemModel(
-      title: 'โต๊ะคอมพิวเตอร์',
-      category: 'หมวดฟอร์นิเจอร์ : ครุภัณฑ์สำนักงาน',
-      description: 'รายละเอียดฟอร์นิเจอร์ : โต๊ะคอมพิวเตอร์',
-      location: 'สำนักงาน B',
-      count: 5,
-    ),
-    PropertyItemModel(
-      title: 'จอ LCD รุ่น AOC',
-      category: 'หมวดฟอร์นิเจอร์ : ครุภัณฑ์สำนักงาน',
-      description: 'รายละเอียดฟอร์นิเจอร์ : จอ LCD',
-      location: 'สำนักงาน B',
-      count: 20,
-    ),
-    PropertyItemModel(
-      title: 'คอมพิวเตอร์ตั้งโต๊ะ',
-      category: 'หมวดฟอร์นิเจอร์ : ครุภัณฑ์สำนักงาน',
-      description: 'รายละเอียดฟอร์นิเจอร์ : คอมพิวเตอร์',
-      location: 'สำนักงาน B',
-      count: 18,
-    ),
-  ];
-
   Zebra123? zebra123;
   Interfaces interface = Interfaces.unknown;
   Status connectionStatus = Status.disconnected;
@@ -78,6 +26,7 @@ class _PropertySetListListingScreenState extends State<PropertySetListListingScr
 
   bool scanning = false;
   bool tracking = false;
+  bool _isDisposed = false;
 
   Views view = Views.list;
 
@@ -88,27 +37,33 @@ class _PropertySetListListingScreenState extends State<PropertySetListListingScr
     // Initialize the Zebra123 instance
     zebra123 = Zebra123(callback: callback);
 
-    zebra123?.onTagRead(
-      onTagRead: (RfidTag tag) {
-        setState(() {
-          tags.add(tag);
-        });
-      },
-      onTagsRead: (List<RfidTag> batch) {
-        setState(() {
-          tags.addAll(batch);
-        });
-      },
-    );
+    // zebra123?.onTagRead(
+    //   onTagRead: (RfidTag tag) {
+    //     if (!_isDisposed && mounted) {
+    //       setState(() {
+    //         tags.add(tag);
+    //       });
+    //     }
+    //   },
+    //   onTagsRead: (List<RfidTag> batch) {
+    //     if (!_isDisposed && mounted) {
+    //       setState(() {
+    //         tags.addAll(batch);
+    //       });
+    //     }
+    //   },
+    // );
   }
 
   @override
   void dispose() {
     super.dispose();
     // Dispose of any resources if needed
+    _isDisposed = true;
     zebra123?.disconnect();
     zebra123?.stopScanning();
     zebra123?.stopTracking();
+    super.dispose();
 
     print("on dispose");
   }
@@ -192,11 +147,13 @@ class _PropertySetListListingScreenState extends State<PropertySetListListingScr
     Widget connectBtn;
     if (zebra123?.connectionStatus == Status.connected) {
       connectBtn = FloatingActionButton(
+          heroTag: "disconnectBtn",
           backgroundColor: Colors.lightGreenAccent,
           onPressed: () => zebra123?.disconnect(),
           child: const Text("Disconnect", style: TextStyle(color: Colors.black, fontSize: 16)));
     } else {
       connectBtn = FloatingActionButton(
+          heroTag: "connectBtn",
           backgroundColor: Colors.redAccent.shade100,
           onPressed: () => zebra123?.connect(),
           child: const Text("Connect", style: TextStyle(color: Colors.black, fontSize: 16)));
@@ -207,6 +164,7 @@ class _PropertySetListListingScreenState extends State<PropertySetListListingScr
     Widget scanBtn = const Offstage();
     if (zebra123?.connectionStatus == Status.connected && !scanning && !tracking) {
       scanBtn = FloatingActionButton(
+          heroTag: "scanBtn",
           backgroundColor: Colors.lightGreenAccent,
           onPressed: () => startScanning(),
           child: const Text("Scan", style: TextStyle(color: Colors.black, fontSize: 16)));
@@ -217,6 +175,7 @@ class _PropertySetListListingScreenState extends State<PropertySetListListingScr
     Widget readBtn = const Offstage();
     if (zebra123?.connectionStatus == Status.connected && !scanning && !tracking) {
       readBtn = FloatingActionButton(
+          heroTag: "readtBtn",
           backgroundColor: Colors.lightGreenAccent,
           onPressed: () => startReading(),
           child: const Text("Read", style: TextStyle(color: Colors.black, fontSize: 16)));
@@ -227,6 +186,7 @@ class _PropertySetListListingScreenState extends State<PropertySetListListingScr
     Widget testBtn = const Offstage();
     if (zebra123?.connectionStatus == Status.connected && !scanning && !tracking) {
       readBtn = FloatingActionButton(
+          heroTag: "testBtn",
           backgroundColor: Colors.lightGreenAccent,
           onPressed: () => startReading(),
           child: const Text("Test", style: TextStyle(color: Colors.black, fontSize: 16)));
@@ -237,6 +197,7 @@ class _PropertySetListListingScreenState extends State<PropertySetListListingScr
     Widget stopBtn = const Offstage();
     if (scanning || tracking) {
       stopBtn = FloatingActionButton(
+          heroTag: "stoptBtn",
           backgroundColor: Colors.redAccent.shade100,
           onPressed: () => stop(),
           child: const Text("Stop", style: TextStyle(color: Colors.black, fontSize: 16)));
@@ -432,6 +393,7 @@ class _PropertySetListListingScreenState extends State<PropertySetListListingScr
     var pad = const Padding(padding: EdgeInsets.only(left: 10));
 
     Widget quitBtn = FloatingActionButton(
+        heroTag: "connectBtn",
         backgroundColor: Colors.lightGreenAccent,
         onPressed: () {
           setState(() {
@@ -442,6 +404,7 @@ class _PropertySetListListingScreenState extends State<PropertySetListListingScr
     quitBtn = SizedBox(width: 75, height: 50, child: quitBtn);
 
     Widget writeBtn = FloatingActionButton(
+        heroTag: "connectBtn",
         backgroundColor: Colors.lightGreenAccent,
         onPressed: () => _writeTag(),
         child: const Text("Write", style: TextStyle(color: Colors.black, fontSize: 16)));
@@ -534,7 +497,10 @@ class _PropertySetListListingScreenState extends State<PropertySetListListingScr
           }
         }
         if (interface == Interfaces.datawedge && scanning) scanning = false;
-        setState(() {});
+
+        if (!_isDisposed && mounted) {
+          setState(() {});
+        }
         break;
 
       case Events.readRfid:
@@ -548,32 +514,37 @@ class _PropertySetListListingScreenState extends State<PropertySetListListingScr
           }
         }
         if (interface == Interfaces.datawedge && scanning) scanning = false;
-        setState(() {});
+        if (!_isDisposed && mounted) {
+          setState(() {});
+        }
         break;
 
       case Events.error:
         if (data is Error) {
-          if (kDebugMode) print("Interface: $interface Error: ${data.message}");
+        //  if (kDebugMode) print("Interface: $interface Error: ${data.message}");
+        print("Interface: $interface Error: ${data.message}");
+        } else {
+          if (kDebugMode) print("Interface: $interface Unknown Error: $data");
         }
         break;
 
-      case Events.connectionStatus:
-        if (data is ConnectionStatus) {
-          if (kDebugMode) {
-            print("Interface: $interface ConnectionStatus: ${data.status}");
+       case Events.connectionStatus:
+      if (data is ConnectionStatus) {
+        if (data.status != connectionStatus) {
+          if (!_isDisposed && mounted) {
+            setState(() {
+              connectionStatus = data.status;
+            });
           }
         }
-        if (data.status != connectionStatus) {
-          setState(() {
-            connectionStatus = data.status;
-          });
-        }
-        break;
+      }
+      break;
 
       default:
         if (kDebugMode) {
           if (kDebugMode) print("Interface: $interface Unknown Event: $event");
         }
+        break;
     }
   }
 }

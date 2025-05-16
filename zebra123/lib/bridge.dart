@@ -57,79 +57,80 @@ class Bridge {
     }
   }
 
-  void onTagRead(
-      {required Function(RfidTag tag) onTagRead,
-      required Function(List<RfidTag> tags) onTagsRead}) {
+  void onTagRead({required Function(RfidTag tag) onTagRead, required Function(List<RfidTag> tags) onTagsRead}) {
     if (contains(_listeners.first)) {
-      _listeners.add(Zebra123(callback: (interface, event, data) {
-        if (event == Events.error) {
-       //   if (data is List<RfidTag>) {
+      _listeners.add(
+        Zebra123(
+          callback: (interface, event, data) {
+          //  if (event == Events.error) {
+              //   if (data is List<RfidTag>) {
 
-            var tags =   [
-    RfidTag(
-      epc: "E2000017221101441890AAAA",
-      antenna: 1,
-      rssi: -42,
-      distance: 100,
-      memoryBankData: "MBData_A",
-      lockData: "UNLOCKED",
-      size: 64,
-      seen: "2025-05-14 10:00:00",
-      interface: Interfaces.rfidapi3,
-    ),
-    RfidTag(
-      epc: "E2000017221101441890BBBB",
-      antenna: 2,
-      rssi: -50,
-      distance: 150,
-      memoryBankData: "MBData_B",
-      lockData: "LOCKED",
-      size: 128,
-      seen: "2025-05-14 10:05:00",
-      interface: Interfaces.datawedge,
-    ),
-    RfidTag(
-      epc: "E2000017221101441890CCCC",
-      antenna: 3,
-      rssi: -35,
-      distance: 90,
-      memoryBankData: "MBData_C",
-      lockData: "UNLOCKED",
-      size: 32,
-      seen: "2025-05-14 10:10:00",
-      interface: Interfaces.unknown,
-    ),
-    RfidTag(
-      epc: "E2000017221101441890DDDD",
-      antenna: 4,
-      rssi: -60,
-      distance: 200,
-      memoryBankData: "MBData_D",
-      lockData: "LOCKED",
-      size: 256,
-      seen: "2025-05-14 10:15:00",
-      interface: Interfaces.unknown,
-    ),
-    RfidTag(
-      epc: "E2000017221101441890EEEE",
-      antenna: 5,
-      rssi: -70,
-      distance: 250,
-      memoryBankData: "MBData_E",
-      lockData: "UNLOCKED",
-      size: 512,
-      seen: "2025-05-14 10:20:00",
-      interface: Interfaces.unknown,
-    ),
-
-  ];
-      onTagsRead.call(tags);
-          } else if (data is RfidTag) {
-            onTagRead(data);
-          }
-        }
-    //  }
-      ));
+              var tags = [
+                RfidTag(
+                  epc: "E2000017221101441890AAAA",
+                  antenna: 1,
+                  rssi: -42,
+                  distance: 100,
+                  memoryBankData: "MBData_A",
+                  lockData: "UNLOCKED",
+                  size: 64,
+                  seen: "2025-05-14 10:00:00",
+                  interface: Interfaces.rfidapi3,
+                ),
+                RfidTag(
+                  epc: "E2000017221101441890BBBB",
+                  antenna: 2,
+                  rssi: -50,
+                  distance: 150,
+                  memoryBankData: "MBData_B",
+                  lockData: "LOCKED",
+                  size: 128,
+                  seen: "2025-05-14 10:05:00",
+                  interface: Interfaces.datawedge,
+                ),
+                RfidTag(
+                  epc: "E2000017221101441890CCCC",
+                  antenna: 3,
+                  rssi: -35,
+                  distance: 90,
+                  memoryBankData: "MBData_C",
+                  lockData: "UNLOCKED",
+                  size: 32,
+                  seen: "2025-05-14 10:10:00",
+                  interface: Interfaces.unknown,
+                ),
+                RfidTag(
+                  epc: "E2000017221101441890DDDD",
+                  antenna: 4,
+                  rssi: -60,
+                  distance: 200,
+                  memoryBankData: "MBData_D",
+                  lockData: "LOCKED",
+                  size: 256,
+                  seen: "2025-05-14 10:15:00",
+                  interface: Interfaces.unknown,
+                ),
+                RfidTag(
+                  epc: "E2000017221101441890EEEE",
+                  antenna: 5,
+                  rssi: -70,
+                  distance: 250,
+                  memoryBankData: "MBData_E",
+                  lockData: "UNLOCKED",
+                  size: 512,
+                  seen: "2025-05-14 10:20:00",
+                  interface: Interfaces.unknown,
+                ),
+              ];
+              onTagsRead.call(tags);
+            // } 
+            // else if (data is RfidTag) {
+            //   onTagRead(data);
+            // }
+          },
+          //  }
+        ),
+      );
     }
   }
 
@@ -160,13 +161,11 @@ class Bridge {
         list += ",$tag";
       }
     }
-    _methodChannel
-        .invokeMethod("track", {"request": fromEnum(request), "tags": list});
+    _methodChannel.invokeMethod("track", {"request": fromEnum(request), "tags": list});
   }
 
   // invoke write request
-  void write(String epc,
-      {String? epcNew, double? password, double? passwordNew, String? data}) {
+  void write(String epc, {String? epcNew, double? password, double? passwordNew, String? data}) {
     _methodChannel.invokeMethod("write", {
       "epc": epc,
       "epcNew": epcNew ?? "",
@@ -180,10 +179,8 @@ class Bridge {
   void _eventListener(dynamic payload) {
     try {
       final map = Map<String, dynamic>.from(payload);
-      _interface =
-          toEnum(map['eventSource'] as String, Interfaces.values) ?? _interface;
-      final event =
-          toEnum(map['eventName'] as String, Events.values) ?? Events.unknown;
+      _interface = toEnum(map['eventSource'] as String, Interfaces.values) ?? _interface;
+      final event = toEnum(map['eventName'] as String, Events.values) ?? Events.unknown;
 
       switch (event) {
         case Events.readRfid:

@@ -17,37 +17,39 @@ import io.flutter.plugin.common.MethodChannel.Result
 import java.util.*
 import java.util.Arrays
 
-/** Zebra123  */
-class Zebra123Plugin : FlutterPlugin, MethodCallHandler, StreamHandler {
+/** Zebra123  */class Zebra123Plugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamHandler {
     private var methodHandler: MethodChannel? = null
     private var eventHandler: EventChannel? = null
     private var device: ZebraDevice? = null
     private var context: Context? = null
+    private var eventSink: EventChannel.EventSink? = null
 
     private val METHODCHANNEL = "methodX"
     private val EVENTCHANNEL = "eventX"
 
-    var supportsRfid: Boolean = false
-    var supportsDatawedge: Boolean = false
+    private var supportsRfid: Boolean = false
+    private var supportsDatawedge: Boolean = false
 
-    override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-        context = flutterPluginBinding.applicationContext
+    override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+        context = binding.applicationContext
 
-        methodHandler?.setMethodCallHandler(null)
-        methodHandler = MethodChannel(flutterPluginBinding.binaryMessenger, METHODCHANNEL)
+        methodHandler = MethodChannel(binding.binaryMessenger, METHODCHANNEL)
         methodHandler?.setMethodCallHandler(this)
 
-        eventHandler = EventChannel(flutterPluginBinding.binaryMessenger, EVENTCHANNEL)
+        eventHandler = EventChannel(binding.binaryMessenger, EVENTCHANNEL)
         eventHandler?.setStreamHandler(this)
     }
 
-    override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
+    override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         disconnect()
         methodHandler?.setMethodCallHandler(null)
         eventHandler?.setStreamHandler(null)
+        eventSink = null
     }
 
-    override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
+    override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
+
+        Log.i(getTagName(context), "onMethodCall ${call.method} ${call.arguments}")
         val method = try {
             ZebraDevice.Methods.valueOf(call.method)
         } catch (e: Exception) {
@@ -55,91 +57,100 @@ class Zebra123Plugin : FlutterPlugin, MethodCallHandler, StreamHandler {
         }
 
         when (method) {
-            ZebraDevice.Methods.track -> device?.let {
-                val request = try {
-                    argument(call, "request")?.let { req ->
-                        ZebraDevice.Requests.valueOf(req)
-                    } ?: ZebraDevice.Requests.unknown
-                } catch (e: Exception) {
-                    ZebraDevice.Requests.unknown
-                }
-                val tags = argument(call, "tags") ?: ""
-                val list = ArrayList(listOf(*tags.split(",").toTypedArray()))
-                it.track(request, list)
+            ZebraDevice.Methods.track -> {
+                val request = getRequest(call)
+                val tags = call.argument<String>("tags") ?: ""
+                val tagList = tags.split(",").map { it.trim() }.filter { it.isNotEmpty() }
+                device?.track(request, ArrayList(tagList))
             }
 
-            ZebraDevice.Methods.scan -> device?.let {
-                val request = try {
-                    argument(call, "request")?.let { req ->
-                        ZebraDevice.Requests.valueOf(req)
-                    } ?: ZebraDevice.Requests.unknown
-                } catch (e: Exception) {
-                    ZebraDevice.Requests.unknown
-                }
-                Log.e(getTagName(context), "request: $request")
-                val tags = argument(call, "tags") ?: ""
-                Log.e(getTagName(context), "tags: $tags")
-                it.scan(request)
+            ZebraDevice.Methods.scan -> {
+               disconnect()
+              connect(eventSink)
+                val request = getRequest(call)
+                device?.scan(request)
             }
 
-            ZebraDevice.Methods.mode -> device?.let {
+            ZebraDevice.Methods.mode -> {
                 val mode = try {
-                    argument(call, "mode")?.let { m ->
-                        ZebraDevice.Modes.valueOf(m)
-                    } ?: ZebraDevice.Modes.mixed
+                    call.argument<String>("mode")?.let { ZebraDevice.Modes.valueOf(it) }
                 } catch (e: Exception) {
-                    ZebraDevice.Modes.mixed
-                }
-                it.setMode(mode)
+                    null
+                } ?: ZebraDevice.Modes.mixed
+
+              Log.e(getTagName(context), "kotlin Setting onMethodCall  mode to $mode")
+
+
+                device?.setMode(mode)
+
             }
 
-            ZebraDevice.Methods.write -> device?.let {
-                val epc = argument(call, "epc") ?: ""
-                val newEpc = argument(call, "epcNew") ?: ""
-                val password = argument(call, "password") ?: ""
-                val newPassword = argument(call, "passwordNew") ?: ""
-                val data = argument(call, "data") ?: ""
-                it.write(epc, newEpc, password, newPassword, data)
+            ZebraDevice.Methods.write -> {
+                val epc = call.argument<String>("epc") ?: ""
+                val newEpc = call.argument<String>("epcNew") ?: ""
+                val password = call.argument<String>("password") ?: ""
+                val newPassword = call.argument<String>("passwordNew") ?: ""
+                val data = call.argument<String>("data") ?: ""
+                device?.write(epc, newEpc, password, newPassword, data)
             }
 
-            else -> Toast.makeText(
-                context,
-                "Method ${call.method} not implemented",
-                Toast.LENGTH_LONG
-            ).show()
+            // ZebraDevice.Methods.reconnect -> {
+            //     disconnect()
+            //     connect(eventSink)
+            // }
+
+            else -> {
+                Toast.makeText(context, "Method ${call.method} not implemented", Toast.LENGTH_LONG).show()
+                result.notImplemented()
+                return
+            }
         }
 
         result.success(null)
     }
 
-    
-    override fun onListen(arguments: Any?, sink: EventSink?) {
-        supportsRfid = ZebraRfid.isSupported(context!!)
+    override fun onListen(arguments: Any?, sink: EventChannel.EventSink?) {
+            Log.i(getTagName(context), "onListen...")
+        eventSink = sink
+        supportsRfid = context?.let { ZebraRfid.isSupported(it) } ?: false
         supportsDatawedge = context?.let { ZebraDataWedge.isSupported(it) } ?: false
 
-        val map = HashMap<String, Any>().apply {
-            put(ZebraDevice.Interfaces.rfidapi3.toString(), supportsRfid.toString())
-            put(ZebraDevice.Interfaces.datawedge.toString(), supportsDatawedge.toString())
-        }
-        sendEvent(sink, ZebraDevice.Events.support, map)
+        val supportMap = hashMapOf(
+            ZebraDevice.Interfaces.rfidapi3.toString() to supportsRfid.toString(),
+            ZebraDevice.Interfaces.datawedge.toString() to supportsDatawedge.toString()
+        )
 
-        Log.e(getTagName(context), "onListen: ${supportsDatawedge}")
-
+        sendEvent(sink, ZebraDevice.Events.support, supportMap)
         connect(sink)
+        
+
     }
 
     override fun onCancel(arguments: Any?) {
-        Log.w(getTagName(context), "cancelling listener")
+        Log.w(getTagName(context), "Cancelling listener")
+        disconnect()
+        eventSink = null
     }
 
-    private fun argument(call: MethodCall, key: String): String? {
-        return call.argument<String>(key)
+    private fun getRequest(call: MethodCall): ZebraDevice.Requests {
+        return try {
+            call.argument<String>("request")?.let {
+                ZebraDevice.Requests.valueOf(it)
+            }
+        } catch (e: Exception) {
+            null
+        } ?: ZebraDevice.Requests.unknown
     }
 
-    private fun connect(sink: EventSink?) {
+    private fun connect(sink: EventChannel.EventSink?) {
         try {
+            Log.i(getTagName(context), "Attempting to connect...")
+
             device?.disconnect()
             device = null
+
+            supportsRfid = context?.let { ZebraRfid.isSupported(it) } ?: false
+            supportsDatawedge = context?.let { ZebraDataWedge.isSupported(it) } ?: false
 
             when {
                 supportsRfid -> {
@@ -163,20 +174,23 @@ class Zebra123Plugin : FlutterPlugin, MethodCallHandler, StreamHandler {
                     Toast.makeText(context, "notify device", Toast.LENGTH_LONG).show()
                 }
             }
+
         } catch (e: Exception) {
-            Log.e(getTagName(context), "Error connecting to device ${e.message}")
-            sendEvent(sink, ZebraDevice.Events.error, ZebraDevice.toError("Error during connect()", e))
+          Log.e(getTagName(context), "Error connecting to device ${e.message}")
+            // sendEvent(sink, ZebraDevice.Events.error, ZebraDevice.toError("Error during connect()", e))
             Toast.makeText(context, "Error connecting to device ${e.message}", Toast.LENGTH_LONG).show()
         }
     }
 
     private fun disconnect() {
+        Log.i(getTagName(context), "Disconnecting device...")
         device?.disconnect()
+        device = null
     }
 
-    private fun sendEvent(sink: EventSink?, event: ZebraDevice.Events, map: HashMap<*, *>) {
+    private fun sendEvent(sink: EventChannel.EventSink?, event: ZebraDevice.Events, map: Map<String, Any>) {
         if (sink == null) {
-            Log.e(getTagName(context), "Can't send notification to flutter. Sink is null")
+            Log.e(getTagName(context), "EventSink is null. Cannot send event: $event")
             return
         }
 
@@ -187,7 +201,7 @@ class Zebra123Plugin : FlutterPlugin, MethodCallHandler, StreamHandler {
             }
             sink.success(eventMap)
         } catch (e: Exception) {
-            Log.e(getTagName(context), "Error sending notification to flutter. Error: ${e.message}")
+            Log.e(getTagName(context), "Error sending event: ${e.message}")
         }
     }
 
@@ -195,23 +209,15 @@ class Zebra123Plugin : FlutterPlugin, MethodCallHandler, StreamHandler {
         private val INTERFACE = ZebraDevice.Interfaces.unknown
 
         @JvmStatic
-        fun getPackageName(context: Context?): String {
-            return context?.packageName ?: "unknown"
-        }
+        fun getPackageName(context: Context?): String = context?.packageName ?: "unknown"
 
         @JvmStatic
-        fun getProfileName(context: Context?): String {
-            return "${getPackageName(context)}.profile"
-        }
+        fun getProfileName(context: Context?): String = "${getPackageName(context)}.profile"
 
         @JvmStatic
-        fun getActionName(context: Context?): String {
-            return "${getPackageName(context)}.ACTION"
-        }
+        fun getActionName(context: Context?): String = "${getPackageName(context)}.ACTION"
 
         @JvmStatic
-        fun getTagName(context: Context?): String {
-            return "${getPackageName(context)}.ZEBRA"
-        }
+        fun getTagName(context: Context?): String = "${getPackageName(context)}.ZEBRA"
     }
 }
