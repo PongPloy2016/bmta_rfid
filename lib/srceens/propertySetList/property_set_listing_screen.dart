@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:bmta_rfid_app/models/propertyItemModel/property_Item_model.dart';
 import 'package:bmta_rfid_app/widgets/propertysetItemWidgets/property_set_Item_widgets.dart';
 import 'package:flutter/foundation.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:zebra123/zebra123.dart';
 
 class PropertySetListListingScreen extends StatefulWidget {
@@ -95,18 +96,18 @@ class _PropertySetListListingScreenState extends State<PropertySetListListingScr
 
     // สมัครฟังเหตุการณ์อ่าน RFID tag
     // register the two callbacks
-    zebra123?.onTagRead(
-      onTagRead: (RfidTag tag) {
-        setState(() {
-          tags.add(tag);
-        });
-      },
-      onTagsRead: (List<RfidTag> batch) {
-        setState(() {
-          tags.addAll(batch);
-        });
-      },
-    );
+    // zebra123?.onTagRead(
+    //   onTagRead: (RfidTag tag) {
+    //     setState(() {
+    //       tags.add(tag);
+    //     });
+    //   },
+    //   onTagsRead: (List<RfidTag> batch) {
+    //     setState(() {
+    //       tags.addAll(batch);
+    //     });
+    //   },
+    // );
   }
 
   void stopScanning() {
@@ -147,65 +148,64 @@ class _PropertySetListListingScreenState extends State<PropertySetListListingScr
     Widget connectBtn;
     if (zebra123?.connectionStatus == Status.connected) {
       connectBtn = FloatingActionButton(
-          heroTag: "disconnectBtn",
           backgroundColor: Colors.lightGreenAccent,
           onPressed: () => zebra123?.disconnect(),
-          child: const Text("Disconnect", style: TextStyle(color: Colors.black, fontSize: 16)));
+          child: const Text("Disconnect",
+              style: TextStyle(color: Colors.black, fontSize: 16)));
     } else {
       connectBtn = FloatingActionButton(
-          heroTag: "connectBtn",
           backgroundColor: Colors.redAccent.shade100,
           onPressed: () => zebra123?.connect(),
-          child: const Text("Connect", style: TextStyle(color: Colors.black, fontSize: 16)));
+          child: const Text("Connect",
+              style: TextStyle(color: Colors.black, fontSize: 16)));
     }
     connectBtn = Padding(
-        padding: const EdgeInsets.only(left: 5, right: 5), child: SizedBox(width: 100, height: 50, child: connectBtn));
+        padding: const EdgeInsets.only(left: 5, right: 5),
+        child: SizedBox(width: 100, height: 50, child: connectBtn));
 
     Widget scanBtn = const Offstage();
-    if (zebra123?.connectionStatus == Status.connected && !scanning && !tracking) {
+    if (zebra123?.connectionStatus == Status.connected &&
+        !scanning &&
+        !tracking) {
       scanBtn = FloatingActionButton(
-          heroTag: "scanBtn",
           backgroundColor: Colors.lightGreenAccent,
           onPressed: () => startScanning(),
-          child: const Text("Scan", style: TextStyle(color: Colors.black, fontSize: 16)));
+          child: const Text("Scan",
+              style: TextStyle(color: Colors.black, fontSize: 16)));
       scanBtn = Padding(
-          padding: const EdgeInsets.only(left: 5, right: 5), child: SizedBox(width: 75, height: 50, child: scanBtn));
+          padding: const EdgeInsets.only(left: 5, right: 5),
+          child: SizedBox(width: 75, height: 50, child: scanBtn));
     }
 
     Widget readBtn = const Offstage();
-    if (zebra123?.connectionStatus == Status.connected && !scanning && !tracking) {
+    if (zebra123?.connectionStatus == Status.connected &&
+        !scanning &&
+        !tracking) {
       readBtn = FloatingActionButton(
-          heroTag: "readtBtn",
           backgroundColor: Colors.lightGreenAccent,
           onPressed: () => startReading(),
-          child: const Text("Read", style: TextStyle(color: Colors.black, fontSize: 16)));
+          child: const Text("Read RFID",
+              style: TextStyle(color: Colors.black, fontSize: 16)));
       readBtn = Padding(
-          padding: const EdgeInsets.only(left: 5, right: 5), child: SizedBox(width: 75, height: 50, child: readBtn));
-    }
-
-    Widget testBtn = const Offstage();
-    if (zebra123?.connectionStatus == Status.connected && !scanning && !tracking) {
-      readBtn = FloatingActionButton(
-          heroTag: "testBtn",
-          backgroundColor: Colors.lightGreenAccent,
-          onPressed: () => startReading(),
-          child: const Text("Test", style: TextStyle(color: Colors.black, fontSize: 16)));
-      readBtn = Padding(
-          padding: const EdgeInsets.only(left: 5, right: 5), child: SizedBox(width: 75, height: 50, child: readBtn));
+          padding: const EdgeInsets.only(left: 5, right: 5),
+          child: SizedBox(width: 75, height: 50, child: readBtn));
     }
 
     Widget stopBtn = const Offstage();
     if (scanning || tracking) {
       stopBtn = FloatingActionButton(
-          heroTag: "stoptBtn",
           backgroundColor: Colors.redAccent.shade100,
           onPressed: () => stop(),
-          child: const Text("Stop", style: TextStyle(color: Colors.black, fontSize: 16)));
+          child: const Text("Stop",
+              style: TextStyle(color: Colors.black, fontSize: 16)));
       stopBtn = Padding(
-          padding: const EdgeInsets.only(left: 5, right: 5), child: SizedBox(width: 75, height: 50, child: stopBtn));
+          padding: const EdgeInsets.only(left: 5, right: 5),
+          child: SizedBox(width: 75, height: 50, child: stopBtn));
     }
 
-    var buttons = Row(mainAxisAlignment: MainAxisAlignment.center, children: [connectBtn, scanBtn, readBtn, stopBtn]);
+    var buttons = Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [connectBtn, scanBtn, readBtn, stopBtn]);
     children.add(buttons);
 
     List<Widget> results = [];
@@ -213,12 +213,14 @@ class _PropertySetListListingScreenState extends State<PropertySetListListingScr
       var t1 = Row(mainAxisAlignment: MainAxisAlignment.start, children: [
         const Text("Barcode:"),
         pad,
-        Text(barcode.barcode, style: const TextStyle(fontWeight: FontWeight.bold))
+        Text(barcode.barcode,
+            style: const TextStyle(fontWeight: FontWeight.bold))
       ]);
       var t2 = Row(mainAxisAlignment: MainAxisAlignment.start, children: [
         const Text("Format:"),
         pad,
-        Text(barcode.format, style: const TextStyle(fontWeight: FontWeight.bold))
+        Text(barcode.format,
+            style: const TextStyle(fontWeight: FontWeight.bold))
       ]);
       var t3 = Row(mainAxisAlignment: MainAxisAlignment.start, children: [
         const Text("Seen:"),
@@ -228,150 +230,249 @@ class _PropertySetListListingScreenState extends State<PropertySetListListingScr
       var t4 = Row(mainAxisAlignment: MainAxisAlignment.start, children: [
         const Text("Interface:"),
         pad,
-        Text("${barcode.interface}", style: const TextStyle(fontWeight: FontWeight.bold))
+        Text("${barcode.interface}",
+            style: const TextStyle(fontWeight: FontWeight.bold))
       ]);
       var subtitle = Column(
-          mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [t1, t2, t3, t4]);
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [t1, t2, t3, t4]);
       results.add(ListTile(
-          leading: const Icon(Icons.barcode_reader),
-          subtitle: SingleChildScrollView(scrollDirection: Axis.horizontal, child: subtitle)));
+          leading: const Icon(Icons.qr_code_scanner),
+          subtitle: SingleChildScrollView(
+              scrollDirection: Axis.horizontal, child: subtitle)));
     }
-    for (var tag in tags) {
-      var t1 = Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [const Text("Tag:"), pad, Text(tag.epc, style: const TextStyle(fontWeight: FontWeight.bold))]);
-      var t2 = Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-        const Text("Rssi:"),
-        pad,
-        Text("${tag.rssi}", style: const TextStyle(fontWeight: FontWeight.bold))
-      ]);
-      var t3 = Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [const Text("Seen:"), pad, Text(tag.seen, style: const TextStyle(fontWeight: FontWeight.bold))]);
-      var t4 = Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-        const Text("Interface:"),
-        pad,
-        Text("${tag.interface}", style: const TextStyle(fontWeight: FontWeight.bold))
-      ]);
+ 
+    // for (var tag in tags) {
+    //      Fluttertoast.showToast(msg: "Tag: ${tag.epc} Rssi: ${tag.rssi}  Seen: ${tag.seen} Interface: ${tag.interface} ");
+    //   var t1 = Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+    //     const Text("Tag:"),
+    //     pad,
+    //     Text(tag.epc, style: const TextStyle(fontWeight: FontWeight.bold))
+    //   ]);
+    //   var t2 = Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+    //     const Text("Rssi:"),
+    //     pad,
+    //     Text("${tag.rssi}", style: const TextStyle(fontWeight: FontWeight.bold))
+    //   ]);
+    //   var t3 = Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+    //     const Text("Seen:"),
+    //     pad,
+    //     Text(tag.seen, style: const TextStyle(fontWeight: FontWeight.bold))
+    //   ]);
+    //   var t4 = Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+    //     const Text("Interface:"),
+    //     pad,
+    //     Text("${tag.interface}",
+    //         style: const TextStyle(fontWeight: FontWeight.bold))
+    //   ]);
 
-      Widget writeBtn = OutlinedButton(
-          child: const Text("Write", style: TextStyle(color: Colors.black, fontSize: 16)),
-          onPressed: () {
-            setState(() {
-              this.tag = tag;
-              view = Views.write;
-            });
-          });
-      writeBtn = SizedBox(width: 100, height: 35, child: writeBtn);
+    //   Widget writeBtn = OutlinedButton(
+    //       child: const Text("Write",
+    //           style: TextStyle(color: Colors.black, fontSize: 16)),
+    //       onPressed: () {
+    //         setState(() {
+    //           this.tag = tag;
+    //           view = Views.write;
+    //         });
+    //       });
+    //   writeBtn = SizedBox(width: 100, height: 35, child: writeBtn);
 
-      Widget trackBtn = OutlinedButton(
-          onPressed: () => _trackTag(tag.epc),
-          child: const Text("Track", style: TextStyle(color: Colors.black, fontSize: 16)));
-      trackBtn = SizedBox(width: 100, height: 35, child: trackBtn);
+    //   Widget trackBtn = OutlinedButton(
+    //       onPressed: () => _trackTag(tag.epc),
+    //       child: const Text("Track",
+    //           style: TextStyle(color: Colors.black, fontSize: 16)));
+    //   trackBtn = SizedBox(width: 100, height: 35, child: trackBtn);
 
-      Widget t5 = Padding(
-          padding: const EdgeInsets.only(top: 10),
-          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [writeBtn, pad, trackBtn]));
-      if (tracking) {
-        t5 = const Offstage();
-      }
+    //   Widget t5 = Padding(
+    //       padding: const EdgeInsets.only(top: 10),
+    //       child: Row(
+    //           mainAxisAlignment: MainAxisAlignment.center,
+    //           children: [writeBtn, pad, trackBtn]));
+    //   if (tracking) {
+    //     t5 = const Offstage();
+    //   }
 
-      var subtitle = Column(
-          mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [t1, t2, t3, t4, t5]);
+    //   var subtitle = Column(
+    //       mainAxisSize: MainAxisSize.min,
+    //       crossAxisAlignment: CrossAxisAlignment.start,
+    //       children: [t1, t2, t3, t4, t5]);
 
-      results.add(ListTile(
-          leading: const Icon(Icons.barcode_reader),
-          subtitle: SingleChildScrollView(scrollDirection: Axis.horizontal, child: subtitle)));
-    }
+    //   results.add(ListTile(
+    //       leading: const Icon(Icons.tag_faces_outlined),
+    //       subtitle: SingleChildScrollView(
+    //           scrollDirection: Axis.horizontal, child: subtitle)));
+    // }
+
+
+
+    results.add( 
+      Expanded(
+        child: ListView.builder(
+          itemCount: tags.length,
+          itemBuilder: (context, index) {
+            final item = tags[index];
+        
+            return PropertySetItemWidgets(
+              item: PropertyItemModel(
+                title: item.epc,
+                category: item.rssi.toString(),
+                description: item.seen,
+                location: item.interface.toString(),
+                count: 0,
+              ),
+              onlickTap: () {
+                print("onclick propertyListRegistrationDetails");
+                //  Navigator.pushNamed(context, AppRouter.propertyListRegistrationDetails);
+                //  Navigator.push(context, PropertyListRegistrationDetailsScreen())
+        
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PropertyListRegistrationDetailsScreen(),
+                  ),
+                );
+              },
+            );
+          },
+        ),
+      ));
+
+    results.add(
+      Card(
+        color: Colors.green,
+        margin: const EdgeInsets.all(10),
+        elevation: 2,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                const Text(
+                  "รายการทรัพย์สินที่พบ",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 26,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  "จำนวน ${tags.length} รายการ",
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 26,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),  
+    );
+
+     children.addAll(results);
+
+
+    return Column(mainAxisSize: MainAxisSize.min, children: children);
 
     // children.addAll(results);
+    // var data = tags.map((item) {
+    //   return PropertyItemModel(
+    //     title: item.epc,
+    //     category: item.rssi.toString(),
+    //     description: item.seen,
+    //     location: item.interface.toString(),
+    //     count: 0,
+    //   );
+    // }).toList();
 
-    var data = tags.map((item) {
-      return PropertyItemModel(
-        title: item.epc,
-        category: item.rssi.toString(),
-        description: item.seen,
-        location: item.interface.toString(),
-        count: 0,
-      );
-    }).toList();
+    // return Column(
+    //   children: [
+    //     Row(mainAxisAlignment: MainAxisAlignment.center, children: [connectBtn, scanBtn, readBtn, stopBtn]),
+    //     // CustomAppBar(
 
-    return Column(
-      children: [
-        Row(mainAxisAlignment: MainAxisAlignment.center, children: [connectBtn, scanBtn, readBtn, stopBtn]),
-        // CustomAppBar(
+    //     Expanded(
+    //       child: ListView.builder(
+    //         itemCount: tags.length,
+    //         itemBuilder: (context, index) {
+    //           final item = tags[index];
 
-        Expanded(
-          child: ListView.builder(
-            itemCount: tags.length,
-            itemBuilder: (context, index) {
-              final item = tags[index];
+    //           return PropertySetItemWidgets(
+    //             item: data[index],
+    //             onlickTap: () {
+    //               print("onclick propertyListRegistrationDetails");
+    //               //  Navigator.pushNamed(context, AppRouter.propertyListRegistrationDetails);
+    //               //  Navigator.push(context, PropertyListRegistrationDetailsScreen())
 
-              return PropertySetItemWidgets(
-                item: data[index],
-                onlickTap: () {
-                  print("onclick propertyListRegistrationDetails");
-                  //  Navigator.pushNamed(context, AppRouter.propertyListRegistrationDetails);
-                  //  Navigator.push(context, PropertyListRegistrationDetailsScreen())
+    //               Navigator.push(
+    //                 context,
+    //                 MaterialPageRoute(
+    //                   builder: (context) => PropertyListRegistrationDetailsScreen(),
+    //                 ),
+    //               );
+    //             },
+    //           );
+    //         },
+    //       ),
+    //     ),
+    //     // Bottom card with total number of items
+    //     const SizedBox(height: 10), // Add spacing after the bottom card
 
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => PropertyListRegistrationDetailsScreen(),
-                    ),
-                  );
-                },
-              );
-            },
-          ),
-        ),
-        // Bottom card with total number of items
-        const SizedBox(height: 10), // Add spacing after the bottom card
+    //     Card(
+    //       color: Colors.green,
+    //       margin: const EdgeInsets.all(10),
+    //       elevation: 2,
+    //       shape: const RoundedRectangleBorder(
+    //         borderRadius: BorderRadius.only(
+    //           topLeft: Radius.circular(20),
+    //           topRight: Radius.circular(20),
+    //         ),
+    //       ),
+    //       child: Padding(
+    //         padding: const EdgeInsets.all(8.0),
+    //         child: Container(
+    //           width: double.infinity,
+    //           padding: const EdgeInsets.all(16),
+    //           child: Column(
+    //             children: [
+    //               const Text(
+    //                 "รายการทรัพย์สินที่พบ",
+    //                 style: TextStyle(
+    //                   color: Colors.white,
+    //                   fontSize: 26,
+    //                   fontWeight: FontWeight.bold,
+    //                 ),
+    //                 textAlign: TextAlign.center,
+    //               ),
+    //               Text(
+    //                 "จำนวน ${tags.length} รายการ",
+    //                 style: const TextStyle(
+    //                   color: Colors.white,
+    //                   fontSize: 26,
+    //                   fontWeight: FontWeight.bold,
+    //                 ),
+    //                 textAlign: TextAlign.center,
+    //               ),
+    //             ],
+    //           ),
+    //         ),
+    //       ),
+    //     ),
 
-        Card(
-          color: Colors.green,
-          margin: const EdgeInsets.all(10),
-          elevation: 2,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                children: [
-                  const Text(
-                    "รายการทรัพย์สินที่พบ",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  Text(
-                    "จำนวน ${tags.length} รายการ",
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-
-        const SizedBox(height: 10),
-      ],
-    );
+    //     const SizedBox(height: 10),
+    //   ],
+    // );
   }
 
   void _writeTag() {
@@ -529,15 +630,21 @@ class _PropertySetListListingScreenState extends State<PropertySetListListingScr
         break;
 
        case Events.connectionStatus:
-      if (data is ConnectionStatus) {
+        if (data is ConnectionStatus) {
+          if (kDebugMode) {
+            print("Interface: $interface ConnectionStatus: ${data.status}");
+          }
+        }
         if (data.status != connectionStatus) {
           if (!_isDisposed && mounted) {
             setState(() {
               connectionStatus = data.status;
+
+              print("Interface: $interface ConnectionStatus: ${data.status}");
             });
           }
         }
-      }
+      
       break;
 
       default:

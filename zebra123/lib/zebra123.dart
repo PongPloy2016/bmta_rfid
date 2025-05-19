@@ -7,9 +7,6 @@ import 'classes.dart';
 import 'bridge.dart';
 import 'enums.dart';
 
-import 'zebra123_platform_interface.dart';
-
-
 // callback function for zebra events
 typedef Callback = void Function(
     Interfaces interface, Events event, dynamic data);
@@ -27,12 +24,6 @@ class Zebra123 {
     // otherwise return disconnected
     return Status.disconnected;
   }
-
-    Future<String?> getPlatformVersion() {
-    return Zebra123Platform.instance.getPlatformVersion();
-  }
-
-
 
   Zebra123({required callback}) {
     _callback = callback;
@@ -57,14 +48,6 @@ class Zebra123 {
       _bridge.removeListener(this);
       _callback(_bridge.interface, Events.connectionStatus,
           ConnectionStatus(status: Status.disconnected));
-    }
-  }
-
-  Future  onTagRead(
-      {required Function(RfidTag tag) onTagRead,
-      required Function(List<RfidTag> tags) onTagsRead}) async {
-    if (_bridge.contains(this)) {
-      _bridge.onTagRead(onTagRead: onTagRead, onTagsRead: onTagsRead);
     }
   }
 
@@ -111,8 +94,6 @@ class Zebra123 {
   Future setMode(Modes mode) async {
     if (_bridge.contains(this)) {
       _bridge.setMode(mode);
-
-      print("Zebra123: set mode to $mode");
     }
   }
 
@@ -128,13 +109,6 @@ class Zebra123 {
         passwordNew: passwordNew,
         data: data);
   }
-
-    Future startTest() async {
-    if (_bridge.contains(this)) {
-      _bridge.scan(Requests.start);
-    }
-  }
-
 
   // zebra event callback handler
   void callback(Interfaces interface, Events event, dynamic data) {

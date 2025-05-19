@@ -16,7 +16,6 @@ class MainRfid extends StatefulWidget {
 }
 
 class _MainRfidState extends State<MainRfid> {
-  
   Zebra123? zebra123;
   Interfaces interface = Interfaces.unknown;
   Status connectionStatus = Status.disconnected;
@@ -34,6 +33,7 @@ class _MainRfidState extends State<MainRfid> {
   void initState() {
     zebra123 = Zebra123(callback: callback);
     super.initState();
+
   }
 
   void startReading() {
@@ -132,7 +132,7 @@ class _MainRfidState extends State<MainRfid> {
       readBtn = FloatingActionButton(
           backgroundColor: Colors.lightGreenAccent,
           onPressed: () => startReading(),
-          child: const Text("Read",
+          child: const Text("Read RFID",
               style: TextStyle(color: Colors.black, fontSize: 16)));
       readBtn = Padding(
           padding: const EdgeInsets.only(left: 5, right: 5),
@@ -186,7 +186,7 @@ class _MainRfidState extends State<MainRfid> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [t1, t2, t3, t4]);
       results.add(ListTile(
-          leading: const Icon(Icons.barcode_reader),
+          leading: const Icon(Icons.qr_code_scanner),
           subtitle: SingleChildScrollView(
               scrollDirection: Axis.horizontal, child: subtitle)));
     }
@@ -245,7 +245,7 @@ class _MainRfidState extends State<MainRfid> {
           children: [t1, t2, t3, t4, t5]);
 
       results.add(ListTile(
-          leading: const Icon(Icons.barcode_reader),
+          leading: const Icon(Icons.tag_faces_outlined),
           subtitle: SingleChildScrollView(
               scrollDirection: Axis.horizontal, child: subtitle)));
     }
