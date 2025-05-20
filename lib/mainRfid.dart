@@ -50,7 +50,7 @@ class _MainRfidState extends State<MainRfid> {
   }
 
   void startScanning() {
-    zebra123?.reconnect();
+   // zebra123?.reconnect();
     zebra123?.setMode(Modes.rfid);
     zebra123?.startScanning();
     tags.clear();
@@ -432,4 +432,24 @@ class _MainRfidState extends State<MainRfid> {
         }
     }
   }
+
+@override
+void dispose() {
+
+  // ปิดการเชื่อมต่อทั้งหมด
+  zebra123?.stopScanning();
+  zebra123?.stopTracking();
+  zebra123?.disconnect();
+
+  // ⚠️ ถ้า zebra123 มี method สำหรับ remove หรือ reset callback — เรียกตรงนี้
+  zebra123?.dispose(); // ✅ ตรวจสอบว่า method นี้ล้าง callback ด้วยจริงหรือไม่
+
+  // ❗ ถ้าไม่มี method ชัดเจนสำหรับลบ callback:
+  zebra123 = null;
+
+  print("on dispose");
+
+  super.dispose();
+}
+  
 }

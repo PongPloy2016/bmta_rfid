@@ -91,7 +91,7 @@ void dispose() {
   }
 
   void startScanning() {
-     zebra123?.reconnect();
+   //  zebra123?.reconnect();
     zebra123?.setMode(Modes.rfid);
     zebra123?.startScanning();
     tags.clear();
