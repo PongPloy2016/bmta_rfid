@@ -6,7 +6,6 @@ import 'package:bmta_rfid_app/utils/zebra/enums.dart';
 import 'package:bmta_rfid_app/utils/zebra/zebra123.dart';
 import 'package:bmta_rfid_app/widgets/appbar/custom_app_bar.dart';
 import 'package:bmta_rfid_app/widgets/text/custom_text.dart';
-import 'package:bmta_rfid_app/widgets/textFrom/custom_text_form_field.dart';
 import 'package:bmta_rfid_app/widgets/textFrom/custom_text_form_field_image.dart';
 import 'package:bmta_rfid_app/widgets/widgets.dart';
 import 'package:flutter/foundation.dart';
@@ -342,113 +341,118 @@ class _SearchRfidScreenState extends State<SearchRfidScreen> {
     Widget child = view == Views.write ? _writeView() : _listView();
 
     return Scaffold(
-        appBar: CustomAppBar(
-          title: "กำหนด TAG ID ครุภัณท์" ?? '',
-          onSuccess: () {
-            Navigator.pop(context);
-          },
-        ),
-        body: Column(
-    children: [
-      // ส่วนบน: scrollable form
-      Expanded(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CustomTextFormFieldImage(
-                controller: trackingIdController,
-                hintText: 'หมายเลขครุภัณฑ์',
-                obscureText: false,
-                inputDecoration: inputDecoration(
-                  context,
-                  nameImage: "lib/assets/icons/ic_svg_user.svg",
-                  hintText: 'หมายเลขครุภัณฑ์',
-                ),
-                nameImageView: "lib/assets/images/ic_icon_manu_barcode_search.png",
-
+      appBar: CustomAppBar(
+        title: "ลงทะเบียน RFID " ?? '',
+        onSuccess: () {
+          Navigator.pop(context);
+        },
+      ),
+      body: Column(
+        children: [
+          // ส่วนบน: scrollable form
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomTextFormFieldImage(
+                    controller: trackingIdController,
+                    hintText: 'หมายเลขครุภัณฑ์',
+                    obscureText: false,
+                    inputDecoration: inputDecoration(
+                      context,
+                      nameImage: "lib/assets/icons/ic_svg_user.svg",
+                      hintText: 'หมายเลขครุภัณฑ์',
+                    ),
+                    nameImageView: "lib/assets/images/ic_icon_manu_barcode_search.png",
+                    onClickImage: () {
+                      Navigator.pushNamed(context, AppRouter.equipmentList);
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                  CustomTextFormFieldImage(
+                    controller: subjectController,
+                    hintText: 'TAG ID',
+                    obscureText: false,
+                    inputDecoration: inputDecoration(
+                      context,
+                      nameImage: "lib/assets/icons/ic_svg_user.svg",
+                      hintText: 'TAG ID',
+                    ),
+                    nameImageView: "lib/assets/images/ic_icon_manu_rfid_search.png",
+                    onClickImage: () {
+                      Navigator.pushNamed(context, AppRouter.tagRFIDLists);
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                ],
               ),
-              const SizedBox(height: 10),
-              CustomTextFormFieldImage(
-                controller: subjectController,
-                hintText: 'TAG ID',
-                obscureText: false,
-                inputDecoration: inputDecoration(
-                  context,
-                  nameImage: "lib/assets/icons/ic_svg_user.svg",
-                  hintText: 'TAG ID',
-                ),
-                nameImageView: "lib/assets/images/ic_icon_manu_rfid_search.png",
-              ),
-              const SizedBox(height: 20),
-            ],
+            ),
           ),
-        ),
-      ),
 
-      // ส่วนล่าง: ปุ่มอยู่ชิดล่างเสมอ
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            // ปุ่มตกลง
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.4,
-              height: MediaQuery.of(context).size.height * 0.07,
-              child: ElevatedButton(
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('กำลังค้นหา...')),
-                  );
-                  Navigator.pushNamed(context, AppRouter.serachFindProperty);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF4CAF50),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-                ),
-                child: CustomText(
-                  "ตกลง",
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    fontSize: fontSize2_Title.sp,
-                    color: Color(accidentTextColor),
+          // ส่วนล่าง: ปุ่มอยู่ชิดล่างเสมอ
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // ปุ่มตกลง
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  height: MediaQuery.of(context).size.height * 0.07,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('กำลังค้นหา...')),
+                      );
+                      Navigator.pushNamed(context, AppRouter.serachFindProperty);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF4CAF50),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+                    ),
+                    child: CustomText(
+                      "ตกลง",
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                            fontSize: fontSize2_Title.sp,
+                            color: Color(accidentTextColor),
+                          ),
+                    ),
                   ),
                 ),
-              ),
-            ),
 
-            // ปุ่มล้างข้อมูล
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.4,
-              height: MediaQuery.of(context).size.height * 0.07,
-              child: ElevatedButton(
-                onPressed: () {
-                  trackingIdController.clear();
-                  subjectController.clear();
-                  tagIdController.clear();
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 255, 0, 0),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-                ),
-                child: CustomText(
-                  "ล้างข้อมูล",
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    fontSize: fontSize2_Title.sp,
-                    color: Color(accidentTextColor),
+                // ปุ่มล้างข้อมูล
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  height: MediaQuery.of(context).size.height * 0.07,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      trackingIdController.clear();
+                      subjectController.clear();
+                      tagIdController.clear();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 255, 0, 0),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+                    ),
+                    child: CustomText(
+                      "ล้างข้อมูล",
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                            fontSize: fontSize2_Title.sp,
+                            color: Color(accidentTextColor),
+                          ),
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
-    ],
-  ),
-);
+    );
   }
 
   void callback(Interfaces interface, Events event, dynamic data) {

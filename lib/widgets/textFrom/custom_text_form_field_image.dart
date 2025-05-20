@@ -1,5 +1,6 @@
+
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+
 
 class CustomTextFormFieldImage extends StatelessWidget {
   final TextEditingController? controller;
@@ -13,6 +14,8 @@ class CustomTextFormFieldImage extends StatelessWidget {
   final void Function(String)? onFieldSubmitted;
   final InputDecoration? inputDecoration;
   final String? nameImageView;
+  final void Function()? onClickImage;
+
 
   const CustomTextFormFieldImage({
     super.key,
@@ -27,6 +30,7 @@ class CustomTextFormFieldImage extends StatelessWidget {
     this.onFieldSubmitted,
     this.inputDecoration,
     this.nameImageView,
+    this.onClickImage,
   });
 
   @override
@@ -59,21 +63,28 @@ class CustomTextFormFieldImage extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(
-            width: 50,
-            height: 50,
-            child: Image.asset(
-                fit: BoxFit.fill,
-                nameImageView ?? "lib/assets/images/ic_icon_manu_rfid_search.png",
-                width: 50,
-                height: 50,
-                scale: 2)
-            //     SvgPicture.asset(
-            //   "lib/assets/images/ic_icon_manu_rfid_search.svg",
-            //   width: 10,
-            //   height: 10,
-            // ),
-            ),
+        GestureDetector(
+          onTap: () {
+          
+              onClickImage?.call();
+            
+          },
+          child: SizedBox(
+              width: 50,
+              height: 50,
+              child: Image.asset(
+                  fit: BoxFit.fill,
+                  nameImageView ?? "lib/assets/images/ic_icon_manu_rfid_search.png",
+                  width: 50,
+                  height: 50,
+                  scale: 2)
+              //     SvgPicture.asset(
+              //   "lib/assets/images/ic_icon_manu_rfid_search.svg",
+              //   width: 10,
+              //   height: 10,
+              // ),
+              ),
+        ),
       ],
     );
   }
