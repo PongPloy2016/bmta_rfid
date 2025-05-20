@@ -773,6 +773,16 @@ public class ZebraRfid extends BroadcastReceiver implements ZebraDevice, RfidEve
         }
     }
 
+     synchronized void reconnect() {
+        try {
+           reader.connect();
+          ConfigureReader();
+        }
+        catch (Exception e) {
+            Log.e(Zebra123Plugin.getTagName(context), "Error in reconnect()");
+        }
+     }
+
     // configuration
     private void setAntennaPower(int power) {
         Log.d(Zebra123Plugin.getTagName(context), "setAntennaPower " + power);

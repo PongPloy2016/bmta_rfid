@@ -39,7 +39,7 @@ class _SearchRfidScreenState extends State<SearchRfidScreen> {
   @override
   void initState() {
     zebra123 = Zebra123(callback: callback);
-
+  zebra123?.connect();
    
    
     

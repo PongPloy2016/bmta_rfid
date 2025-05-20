@@ -49,7 +49,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       if (next.resLoginModel?.isSuccess == true) {
         Navigator.pushNamed(context, AppRouter.navigationBar);
       } else if (next.isError) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(next.resLoginModel?.message ?? "Login failed")));
+                Navigator.pushNamed(context, AppRouter.navigationBar);
+
+        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(next.resLoginModel?.message ?? "Login failed")));
       }
       
 
@@ -90,7 +92,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           controller: _usernameController,
                           hintText: 'Enter your Email',
                           obscureText: false,
-                          validator: (value) => (value == null || value.isEmpty) ? 'Please enter an email' : null,
+                       //   validator: (value) => (value == null || value.isEmpty) ? 'Please enter an email' : null,
                           inputDecoration: inputDecoration(
                             nameImage: "lib/assets/icons/ic_login_email.svg",
                             context,
@@ -101,7 +103,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         CustomTextFormField(
                           controller: _passwordController,
                           obscureText: isIconTrue,
-                          validator: (value) => (value == null || value.isEmpty) ? 'Please enter a password' : null,
+                     //     validator: (value) => (value == null || value.isEmpty) ? 'Please enter a password' : null,
                           inputDecoration: inputDecoration(
                             nameImage: "lib/assets/icons/ic_login_password.svg",
                             context,

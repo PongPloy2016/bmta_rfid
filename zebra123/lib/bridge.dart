@@ -151,6 +151,14 @@ class Bridge {
     _methodChannel.invokeMethod("scan", {"request": fromEnum(request)});
   }
 
+  void reconnectZebra() async {
+  try {
+    await _methodChannel.invokeMethod("reconnect");
+  } catch (e) {
+    print("Reconnect error: $e");
+  }
+}
+
   // invoke tracking request
   void track(Requests request, {List<String>? tags}) {
     String list = "";

@@ -37,6 +37,8 @@ class _MainRfidState extends State<MainRfid> {
   }
 
   void startReading() {
+
+
     zebra123?.setMode(Modes.barcode);
     zebra123?.startReading();
     tags.clear();
@@ -48,6 +50,7 @@ class _MainRfidState extends State<MainRfid> {
   }
 
   void startScanning() {
+    zebra123?.reconnect();
     zebra123?.setMode(Modes.rfid);
     zebra123?.startScanning();
     tags.clear();

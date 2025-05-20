@@ -20,6 +20,7 @@ public interface ZebraDevice {
     }
 
     enum Methods {
+        reconnect,
         track,
         scan,
         write,

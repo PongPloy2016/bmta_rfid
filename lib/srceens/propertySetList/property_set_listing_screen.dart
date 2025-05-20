@@ -55,19 +55,22 @@ class _PropertySetListListingScreenState extends State<PropertySetListListingScr
     //   },
     // );
   }
+@override
+void dispose() {
+  _isDisposed = true;
 
-  @override
-  void dispose() {
-    super.dispose();
-    // Dispose of any resources if needed
-    _isDisposed = true;
-    zebra123?.disconnect();
-    zebra123?.stopScanning();
-    zebra123?.stopTracking();
-    super.dispose();
+  // ปิดการเชื่อมต่อทั้งหมด
+  zebra123?.stopScanning();
+  zebra123?.stopTracking();
+  zebra123?.disconnect();
 
-    print("on dispose");
-  }
+  zebra123?.dispose(); 
+  zebra123 = null;
+
+  print("on dispose");
+
+  super.dispose();
+}
 
   void startTest() {
     zebra123?.startReading();
@@ -78,22 +81,28 @@ class _PropertySetListListingScreenState extends State<PropertySetListListingScr
     zebra123?.startReading();
     tags.clear();
     barcodes.clear();
+
+     if (mounted) {
+    setState(() {
+         scanning = true;
+      tracking = false;
+    });
+  }
+  }
+
+  void startScanning() {
+     zebra123?.reconnect();
+    zebra123?.setMode(Modes.rfid);
+    zebra123?.startScanning();
+    tags.clear();
+    barcodes.clear();
+
+   if (!_isDisposed && mounted) {
     setState(() {
       scanning = true;
       tracking = false;
     });
   }
-
-  void startScanning() {
-    zebra123?.setMode(Modes.rfid);
-    zebra123?.startScanning();
-    tags.clear();
-    barcodes.clear();
-    setState(() {
-      scanning = true;
-      tracking = false;
-    });
-
     // สมัครฟังเหตุการณ์อ่าน RFID tag
     // register the two callbacks
     // zebra123?.onTagRead(
@@ -583,6 +592,15 @@ class _PropertySetListListingScreenState extends State<PropertySetListListingScr
   }
 
   void callback(Interfaces interface, Events event, dynamic data) {
+
+  print("Callback received: $event, mounted: $mounted, disposed: $_isDisposed");
+
+    if (_isDisposed || !mounted) {
+    print("Callback called after dispose — ignoring.");
+    return;
+  }
+
+
     this.interface = interface;
 
     switch (event) {

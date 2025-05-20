@@ -90,6 +90,13 @@ class Zebra123 {
     }
   }
 
+
+  Future reconnect() async {
+    if (_bridge.contains(this)) {
+      _bridge.reconnectZebra();
+    }
+  }
+
   // set device mode
   Future setMode(Modes mode) async {
     if (_bridge.contains(this)) {

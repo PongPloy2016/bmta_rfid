@@ -190,12 +190,12 @@ class SerachFindPropertyScreenState extends ConsumerState<SerachFindPropertyScre
                            
                                 });
                               },
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please select a branch';
-                                }
-                                return null;
-                              },
+                              // validator: (value) {
+                              //   if (value == null || value.isEmpty) {
+                              //     return 'Please select a branch';
+                              //   }
+                              //   return null;
+                              // },
                               inputDecoration: inputDecoration(
                                 nameImage: "lib/assets/icons/ic_svg_user.svg",
                                 context,
@@ -214,12 +214,12 @@ class SerachFindPropertyScreenState extends ConsumerState<SerachFindPropertyScre
                              
                                 });
                               },
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please select a building';
-                                }
-                                return null;
-                              },
+                              // validator: (value) {
+                              //   if (value == null || value.isEmpty) {
+                              //     return 'Please select a building';
+                              //   }
+                              //   return null;
+                              // },
                               inputDecoration: inputDecoration(
                                 nameImage: "lib/assets/icons/ic_svg_user.svg",
                                 context,
@@ -238,12 +238,12 @@ class SerachFindPropertyScreenState extends ConsumerState<SerachFindPropertyScre
                                
                                 });
                               },
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please select a floor';
-                                }
-                                return null;
-                              },
+                              // validator: (value) {
+                              //   if (value == null || value.isEmpty) {
+                              //     return 'Please select a floor';
+                              //   }
+                              //   return null;
+                              // },
                               inputDecoration: inputDecoration(
                                 nameImage: "lib/assets/icons/ic_svg_user.svg",
                                 context,
@@ -261,12 +261,12 @@ class SerachFindPropertyScreenState extends ConsumerState<SerachFindPropertyScre
                                   roomSelect = value?.toString();
                                 });
                               },
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please select a room';
-                                }
-                                return null;
-                              },
+                              // validator: (value) {
+                              //   if (value == null || value.isEmpty) {
+                              //     return 'Please select a room';
+                              //   }
+                              //   return null;
+                              // },
                               inputDecoration: inputDecoration(
                                 nameImage: "lib/assets/icons/ic_svg_user.svg",
                                 context,

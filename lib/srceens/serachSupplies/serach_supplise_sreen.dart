@@ -110,12 +110,12 @@ class _SerachSuppliseSreenState extends State<SerachSuppliseSreen> {
                           context,
                           hintText: "รหัสครุภัณฑ์",
                         ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter a code';
-                          }
-                          return null;
-                        },
+                        // validator: (value) {
+                        //   if (value == null || value.isEmpty) {
+                        //     return 'Please enter a code';
+                        //   }
+                        //   return null;
+                        // },
                       ),
                       const SizedBox(height: 16),
 
@@ -129,12 +129,12 @@ class _SerachSuppliseSreenState extends State<SerachSuppliseSreen> {
                           context,
                           hintText: "ชื่อครุภัณฑ์",
                         ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter a name';
-                          }
-                          return null;
-                        },
+                        // validator: (value) {
+                        //   if (value == null || value.isEmpty) {
+                        //     return 'Please enter a name';
+                        //   }
+                        //   return null;
+                        // },
                       ),
                       const SizedBox(height: 16),
 
@@ -155,12 +155,12 @@ class _SerachSuppliseSreenState extends State<SerachSuppliseSreen> {
                             selectedValue = value?.toString();
                           });
                         },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please select an option';
-                          }
-                          return null;
-                        },
+                        // validator: (value) {
+                        //   if (value == null || value.isEmpty) {
+                        //     return 'Please select an option';
+                        //   }
+                        //   return null;
+                        // },
                       ),
                       const SizedBox(height: 16),
 
@@ -176,12 +176,13 @@ class _SerachSuppliseSreenState extends State<SerachSuppliseSreen> {
                             selectedValue = value?.toString();
                           });
                         },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please select an option';
-                          }
-                          return null;
-                        }, inputDecoration: inputDecoration(
+                        // validator: (value) {
+                        //   if (value == null || value.isEmpty) {
+                        //     return 'Please select an option';
+                        //   }
+                        //   return null;
+                        // },
+                         inputDecoration: inputDecoration(
                           nameImage: "lib/assets/icons/ic_svg_user.svg",
                           context,
                           hintText: "ชั้น",

@@ -37,6 +37,8 @@ public class Zebra123Plugin implements FlutterPlugin, MethodCallHandler, StreamH
   boolean supportsRfid = false;
   boolean supportsDatawedge = false;
 
+  private EventSink storedSink;
+
   // returns the package name
   public static String getPackageName(Context context) {
     if (context == null) return "unknown";
@@ -92,6 +94,19 @@ public class Zebra123Plugin implements FlutterPlugin, MethodCallHandler, StreamH
 
     switch (method) {
 
+        case reconnect:
+    if (storedSink != null) {
+      Toast.makeText(context, "Reconnecting to device", Toast.LENGTH_SHORT).show();
+      Log.w(getTagName(context), "Reconnecting to device");
+      connect(storedSink);
+      result.success("reconnecting");
+    } else {
+      result.error("NO_SINK", "No EventSink available to reconnect", null);
+      Toast.makeText(context, "No EventSink available to reconnect", Toast.LENGTH_LONG).show();
+
+    }
+        break;
+
       case track:
         if (device != null) {
           ZebraDevice.Requests request = ZebraDevice.Requests.unknown;
@@ -107,15 +122,53 @@ public class Zebra123Plugin implements FlutterPlugin, MethodCallHandler, StreamH
         break;
 
       case scan:
-        if (device != null) {
-          ZebraDevice.Requests request = ZebraDevice.Requests.unknown;
-          try {
-            request = ZebraDevice.Requests.valueOf(argument(call,"request"));
-          }
-          catch(Exception e) {}
-          device.scan(request);
-        }
-        break;
+
+        //todo how to device.connect
+        // if (device != null) {
+        //   ZebraDevice.Requests request = ZebraDevice.Requests.unknown;
+        //   try {
+        //     request = ZebraDevice.Requests.valueOf(argument(call,"request"));
+        //   }
+        //   catch(Exception e) {}
+        //   device.scan(request);
+        // }
+
+
+  // check if device is null
+
+
+
+    
+  //        if (device == null) {
+  //   // Try to initialize and connect device
+  //   if (supportsRfid) {
+  //     device = new ZebraRfid(context, null); // Pass 'null' or a stored EventSink if needed
+  //     device.connect();
+  //     Toast.makeText(context, "Connecting RFID for scan", Toast.LENGTH_SHORT).show();
+  //   } else if (supportsDatawedge) {
+  //     device = new ZebraDataWedge(context, null);
+  //     device.connect();
+  //     Toast.makeText(context, "Connecting DataWedge for scan", Toast.LENGTH_SHORT).show();
+  //   } else {
+  //     Toast.makeText(context, "No supported Zebra device available", Toast.LENGTH_LONG).show();
+  //     result.error("NO_DEVICE", "No supported Zebra device available", null);
+  //     return;
+  //   }
+  // }
+
+  if (device != null) {
+    ZebraDevice.Requests request = ZebraDevice.Requests.unknown;
+    try {
+      request = ZebraDevice.Requests.valueOf(argument(call, "request"));
+    } catch (Exception e) {
+      Log.e(getTagName(context), "Invalid scan request argument");
+
+      Toast.makeText(context, "Invalid scan request argument", Toast.LENGTH_LONG).show();
+    }
+        device.scan(request);
+  }
+
+     break;
 
       case mode:
         if (device != null) {
@@ -124,7 +177,6 @@ public class Zebra123Plugin implements FlutterPlugin, MethodCallHandler, StreamH
             mode = ZebraDevice.Modes.valueOf(argument(call,"mode"));
 
                   Log.e(getTagName(context), "mode: " + mode.toString());
-
 
           }
           catch(Exception e) {}
@@ -153,6 +205,10 @@ public class Zebra123Plugin implements FlutterPlugin, MethodCallHandler, StreamH
 
   @Override
   public void onListen(Object arguments, EventChannel.EventSink sink) {
+
+    storedSink = sink; // เก็บ sink ไว้ใช้ในอนาคต
+
+    Log.w(getTagName(context), "starting listener");
 
     // set connection support
     supportsRfid = ZebraRfid.isSupported(context);
@@ -187,8 +243,6 @@ public class Zebra123Plugin implements FlutterPlugin, MethodCallHandler, StreamH
 
     try {
 
-
-
       // disconnect if already connected
       if (device != null) device.disconnect();
       device = null;
@@ -197,7 +251,7 @@ public class Zebra123Plugin implements FlutterPlugin, MethodCallHandler, StreamH
       if (supportsRfid) {
         device = new ZebraRfid(context, sink);
         device.connect();
-        Toast.makeText(context, " connecting Rfid", Toast.LENGTH_LONG).show();
+        Toast.makeText(context, " connecting Rfid New", Toast.LENGTH_LONG).show();
 
       }
 
