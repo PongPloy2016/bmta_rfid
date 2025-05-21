@@ -20,7 +20,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.bmta_rfid_app"
-        minSdk = 21
+        minSdk = 26
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName

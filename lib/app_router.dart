@@ -6,7 +6,9 @@ import 'package:bmta_rfid_app/srceens/equipmentDetail/equipmentDetailScreen.dart
 import 'package:bmta_rfid_app/srceens/equipmentList/equipmentListScreen.dart';
 import 'package:bmta_rfid_app/srceens/login/login_screen.dart';
 import 'package:bmta_rfid_app/srceens/bottomnavpage/navigationBarScreen.dart';
+import 'package:bmta_rfid_app/srceens/mainPage/main_screen.dart';
 import 'package:bmta_rfid_app/srceens/mapingTagRfid/Mapping_tag_Rfid.dart';
+import 'package:bmta_rfid_app/srceens/notificationsPage/notifications_screen.dart';
 import 'package:bmta_rfid_app/srceens/propertyListRegistrationDetails/property_list_registration_details_screen.dart';
 import 'package:bmta_rfid_app/srceens/propertySetList/property_set_listing_screen.dart';
 import 'package:bmta_rfid_app/srceens/scanPage/scanPage.dart';
@@ -19,6 +21,7 @@ class AppRouter {
   // Router Map Key
 
   static const String login = '/';
+  static const String mainPageScreen = '/mainPageScreen';
   static const String serachSupplies = 'serachSupplies';
   static const String forgotPassword = 'forgotPassword';
   static const String navigationBar = 'navigationBar';
@@ -34,14 +37,15 @@ class AppRouter {
   static const String mainRFID = 'mainRFID';
   static const String scanPage = 'scanPage';
   static const String tagRFIDLists = 'tagRFIDLists';
+  static const String notifications = 'notifications';
 
 
   // Router Map
   static get routes => {
     // welcome: (context) => WelcomeScreen(),
     login: (context) => LoginScreen(),
+    mainPageScreen: (context) => MainPageScreen(),
     serachSupplies: (context) => SerachSuppliseSreen(),
-
     // forgotPassword: (context) => ForgotPasswordScreen(),
     navigationBar: (context) => NavigationBarScreen(),
     navigationBarCustoms: (context) => NavigationBarCustomScreen(),
@@ -56,6 +60,7 @@ class AppRouter {
     mainRFID: (context) => MainRfid(),
     scanPage: (context) => ScanPage(),
     tagRFIDLists: (context) => TagRFIDLists(),
+    notifications: (context) =>  NotificationsScreen(),
 
 
   

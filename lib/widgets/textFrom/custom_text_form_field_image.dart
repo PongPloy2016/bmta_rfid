@@ -53,6 +53,7 @@ class CustomTextFormFieldImage extends StatelessWidget {
             margin: const EdgeInsets.only(left: 5, right: 5),
             //height: 50,
             child: TextFormField(
+              enabled: true,
               controller: controller,
               obscureText: obscureText,
               keyboardType: keyboardType,
@@ -70,13 +71,13 @@ class CustomTextFormFieldImage extends StatelessWidget {
             
           },
           child: SizedBox(
-              width: 50,
-              height: 50,
+              width: 65,
+              height: 65,
               child: Image.asset(
                   fit: BoxFit.fill,
                   nameImageView ?? "lib/assets/images/ic_icon_manu_rfid_search.png",
-                  width: 50,
-                  height: 50,
+                  // width: 70,
+                  // height: 70,
                   scale: 2)
               //     SvgPicture.asset(
               //   "lib/assets/images/ic_icon_manu_rfid_search.svg",

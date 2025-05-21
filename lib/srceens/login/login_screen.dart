@@ -1,4 +1,3 @@
-
 import 'package:bmta_rfid_app/app_router.dart';
 import 'package:bmta_rfid_app/models/auth/reqlogin.dart';
 import 'package:bmta_rfid_app/provider/controller/login_controller.dart';
@@ -47,16 +46,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     ref.listen<LoginState>(loginControllerProvider, (previous, next) {
       if (next.resLoginModel?.isSuccess == true) {
-        Navigator.pushNamed(context, AppRouter.navigationBar);
+        Navigator.pushNamed(context, AppRouter.mainPageScreen);
       } else if (next.isError) {
-                Navigator.pushNamed(context, AppRouter.navigationBar);
+        Navigator.pushNamed(context, AppRouter.mainPageScreen);
 
         // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(next.resLoginModel?.message ?? "Login failed")));
       }
-      
-
     });
-  
+
     // ref.listen(loginControllerProvider, (previous, next) {
 
     //   next.whenOrNull(
@@ -92,7 +89,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           controller: _usernameController,
                           hintText: 'Enter your Email',
                           obscureText: false,
-                       //   validator: (value) => (value == null || value.isEmpty) ? 'Please enter an email' : null,
+                          //   validator: (value) => (value == null || value.isEmpty) ? 'Please enter an email' : null,
                           inputDecoration: inputDecoration(
                             nameImage: "lib/assets/icons/ic_login_email.svg",
                             context,
@@ -103,7 +100,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         CustomTextFormField(
                           controller: _passwordController,
                           obscureText: isIconTrue,
-                     //     validator: (value) => (value == null || value.isEmpty) ? 'Please enter a password' : null,
+                          //     validator: (value) => (value == null || value.isEmpty) ? 'Please enter a password' : null,
                           inputDecoration: inputDecoration(
                             nameImage: "lib/assets/icons/ic_login_password.svg",
                             context,
@@ -112,7 +109,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               onPressed: () {
                                 setState(() => isIconTrue = !isIconTrue);
                               },
-                              icon: Icon(isIconTrue ? Icons.visibility : Icons.visibility_off, size: 16, color: Colors.grey),
+                              icon: Icon(isIconTrue ? Icons.visibility : Icons.visibility_off,
+                                  size: 16, color: Colors.grey),
                             ),
                           ),
                         ),
@@ -136,14 +134,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               backgroundColor: const Color(0xFF4CAF50),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
                             ),
-                            child: 
-                             loginState.isLoading
+                            child: loginState.isLoading
                                 ? const CircularProgressIndicator(color: Colors.white)
                                 : CustomTextDefault(
                                     text: 'เข้าสู่ระบบ',
                                     style: TextStyle(fontWeight: fontBold, fontFamily: fontFamily, color: Colors.white),
                                   ),
-                           
                           ),
                         ),
                       ],
