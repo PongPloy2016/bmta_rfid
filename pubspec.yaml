@@ -30,6 +30,7 @@ dependencies:
   zebra123:
     path: ../bmta_RFID/zebra123  # ชี้ไปยัง plugin ที่คุณสร้างไว้
   permission_handler: ^12.0.0+1
+  zebra_scan_datawedge: ^0.0.2
   
 
 dev_dependencies:

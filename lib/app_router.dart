@@ -1,4 +1,5 @@
 
+import 'package:bmta_rfid_app/mainBarcode.dart';
 import 'package:bmta_rfid_app/mainRfid.dart';
 import 'package:bmta_rfid_app/srceens/TagRFIDLists/TagRFIDLists.dart';
 import 'package:bmta_rfid_app/srceens/bottomnavpage/navigationBarCustomScreen.dart';
@@ -35,6 +36,7 @@ class AppRouter {
   static const String mappingTagRfid = 'mappingTagRfid';
   static const String searchRfid = 'searchRfid';
   static const String mainRFID = 'mainRFID';
+  static const String mainBarcode = 'mainBarcode';
   static const String scanPage = 'scanPage';
   static const String tagRFIDLists = 'tagRFIDLists';
   static const String notifications = 'notifications';
@@ -58,6 +60,7 @@ class AppRouter {
     searchRfid: (context) => SearchRfidScreen(),
     mappingTagRfid: (context) => MappingTagRfidScreen(data: MemoItem(memoCode: '', subject: '')),
     mainRFID: (context) => MainRfid(),
+    mainBarcode : (context) => MainBarcode(),
     scanPage: (context) => ScanPage(),
     tagRFIDLists: (context) => TagRFIDLists(),
     notifications: (context) =>  NotificationsScreen(),

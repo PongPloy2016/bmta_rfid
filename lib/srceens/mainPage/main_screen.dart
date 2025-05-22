@@ -128,7 +128,7 @@ class _MainPageScreenState extends State<MainPageScreen> {
                                   //  Navigator.pushNamed(context, AppRouter.mappingTagRfid);
                                   Navigator.pushNamed(context, AppRouter.searchRfid);
                                 } else if (menuItemsModel.id == 3) {
-                                  Navigator.pushNamed(context, AppRouter.serachFindProperty);
+                                  Navigator.pushNamed(context, AppRouter.mainBarcode);
                                 }
 
                                 // Navigator.push(context, MaterialPageRoute(builder: (context) => SerachSuppliseSreen()));
